@@ -24,6 +24,7 @@ public class RectangularFacePainter extends AbstractFacePainter<RectangularFace>
 	protected void paintFace(GL2 gl, RectangularFace t, RenderMode renderMode) {
 		Vector2f dim = t.getDimensions();
 		gl.glBegin(GL2.GL_QUADS);
+		gl.glNormal3f(0, 0, 1);
 		gl.glVertex3f(0, 0, 0);
 		gl.glVertex3f(dim.x, 0, 0);
 		gl.glVertex3f(dim.x, dim.y, 0);
