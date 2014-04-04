@@ -1,5 +1,6 @@
 package com.jayanslow.projection.jogl.utils;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.vecmath.Color3f;
 import javax.vecmath.Color4f;
@@ -57,6 +58,12 @@ public class OpenGLUtils {
 		gl.glEnd();
 	}
 
+	public static float[] getRGBA(Color4f fillColor) {
+		float[] rgba = new float[4];
+		fillColor.get(rgba);
+		return rgba;
+	}
+
 	public static float getValuef(GL2 gl, int param) {
 		float[] getValues = new float[1];
 		gl.glGetFloatv(param, getValues, 0);
@@ -90,11 +97,63 @@ public class OpenGLUtils {
 		gl.glColor4f(color.x, color.y, color.z, color.w);
 	}
 
+	public static void setMaterial(GL2 gl, Color4f fillColor) {
+		setMaterial(gl, getRGBA(fillColor));
+	}
+
+	public static void setMaterial(GL2 gl, Color4f ambientColor, Color4f specularColor, int shininess) {
+		setMaterialSpecular(gl, getRGBA(ambientColor));
+		setMaterialAmbient(gl, getRGBA(specularColor));
+		setMaterialShininess(gl, shininess);
+	}
+
+	public static void setMaterial(GL2 gl, float[] rgba) {
+		setMaterialSpecular(gl, rgba);
+		setMaterialAmbient(gl, rgba);
+		setMaterialShininess(gl, 0.5f);
+	}
+
+	public static void setMaterialAmbient(GL2 gl, Color4f color) {
+		setMaterialAmbient(gl, getRGBA(color));
+
+	}
+
+	public static void setMaterialAmbient(GL2 gl, float[] rgba) {
+
+		gl.glMaterialfv(GL.GL_FRONT, GL2.GL_AMBIENT, rgba, 0);
+	}
+
+	public static void setMaterialShininess(GL2 gl, float shininess) {
+		gl.glMaterialf(GL.GL_FRONT, GL2.GL_SHININESS, shininess);
+	}
+
+	public static void setMaterialSpecular(GL2 gl, Color4f color) {
+		setMaterialSpecular(gl, getRGBA(color));
+	}
+
+	public static void setMaterialSpecular(GL2 gl, float[] rgba) {
+		gl.glMaterialfv(GL.GL_FRONT, GL2.GL_SPECULAR, rgba, 0);
+	}
+
+	public static void setPolygonMode(GL2 gl, boolean fill) {
+		gl.glPolygonMode(GL.GL_FRONT_AND_BACK, fill ? GL2.GL_FILL : GL2.GL_LINE);
+	}
+
 	public static void setVertex(GL2 gl, Vector3f v) {
 		gl.glVertex3f(v.x, v.y, v.z);
 	}
 
 	public static void translate(GL2 gl, Vector3f vector) {
 		gl.glTranslatef(vector.x, vector.y, vector.z);
+	}
+
+	public static void setLighting(GL2 gl, boolean enable) {
+		if (enable) {
+			gl.glEnable(GL2.GL_LIGHTING);
+			gl.glEnable(GL2.GL_LIGHT0);
+		} else {
+			gl.glDisable(GL2.GL_LIGHTING);
+			gl.glDisable(GL2.GL_LIGHT0);
+		}
 	}
 }
