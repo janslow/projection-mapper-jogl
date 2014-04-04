@@ -40,11 +40,20 @@ public class RectangularFacePainter extends AbstractFacePainter<RectangularFace>
 			gl.glEnd();
 
 			gl.glBegin(GL2.GL_LINE_STRIP);
-			gl.glVertex3f(dim.x / 2, dim.y / 2, 0);
-			gl.glVertex3f(dim.x / 2, dim.y * 0.75f, 0);
-			gl.glVertex3f(dim.x * 0.45f, dim.y * 0.7f, 0);
-			gl.glVertex3f(dim.x / 2, dim.y * 0.75f, 0);
-			gl.glVertex3f(dim.x * 0.55f, dim.y * 0.7f, 0);
+			// Up arrow
+			gl.glVertex3f(dim.x * 0.45f, dim.y * 0.70f, 0);
+			gl.glVertex3f(dim.x * 0.50f, dim.y * 0.75f, 0);
+			gl.glVertex3f(dim.x * 0.55f, dim.y * 0.70f, 0);
+			gl.glVertex3f(dim.x * 0.50f, dim.y * 0.75f, 0);
+
+			// Center
+			gl.glVertex3f(dim.x * 0.50f, dim.y * 0.50f, 0);
+
+			// Normal arrow
+			gl.glVertex3f(dim.x * 0.50f, dim.y * 0.50f, dim.x * 0.25f);
+			gl.glVertex3f(dim.x * 0.45f, dim.y * 0.50f, dim.x * 0.2f);
+			gl.glVertex3f(dim.x * 0.50f, dim.y * 0.50f, dim.x * 0.25f);
+			gl.glVertex3f(dim.x * 0.55f, dim.y * 0.50f, dim.x * 0.2f);
 			gl.glEnd();
 
 		}
