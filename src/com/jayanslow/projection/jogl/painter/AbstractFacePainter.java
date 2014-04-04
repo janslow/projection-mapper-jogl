@@ -13,6 +13,9 @@ public abstract class AbstractFacePainter<T extends Face> extends AbstractSimple
 		super(type, factory, strokeColor, fillColor);
 	}
 
+	@Override
+	protected void paintChildren(GL2 gl, T t, RenderMode renderMode) {}
+
 	protected abstract void paintFace(GL2 gl, T t, RenderMode renderMode);
 
 	@Override

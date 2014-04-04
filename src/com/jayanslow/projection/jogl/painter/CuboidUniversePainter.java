@@ -20,31 +20,28 @@ public class CuboidUniversePainter extends AbstractSimplePainter<CuboidUniverse>
 	}
 
 	public CuboidUniversePainter(PainterFactory factory) {
-		super(CuboidUniverse.class, factory, new Color4f(0.3f, 0.8f, 0.8f, 1), null);
+		super(CuboidUniverse.class, factory, new Color4f(0.3f, 0.8f, 0.8f, 1), new Color4f());
 	}
 
 	@Override
 	public void paint(GL2 gl, CuboidUniverse t, RenderMode renderMode) {
-		if (renderMode == RenderMode.SOLID) {
-			gl.glEnable(GL2.GL_LIGHTING);
-			gl.glEnable(GL2.GL_LIGHT0);
+		float SHINE_ALL_DIRECTIONS = 1;
+		float[] lightPos = { 0, 0, 0, SHINE_ALL_DIRECTIONS };
+		float[] lightColorAmbient = { 0.2f, 0.2f, 0.2f, 1f };
+		float[] lightColorSpecular = { 0.8f, 0.8f, 0.8f, 1f };
 
-			float SHINE_ALL_DIRECTIONS = 1;
-			float[] lightPos = { 0, 0, 0, SHINE_ALL_DIRECTIONS };
-			float[] lightColorAmbient = { 0.2f, 0.2f, 0.2f, 1f };
-			float[] lightColorSpecular = { 0.8f, 0.8f, 0.8f, 1f };
-
-			// Set light parameters.
-			gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, lightPos, 0);
-			gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, lightColorAmbient, 0);
-			gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, lightColorSpecular, 0);
-
-			// Enable lighting in GL.
-			gl.glEnable(GL2.GL_LIGHT1);
-			gl.glEnable(GL2.GL_LIGHTING);
-		}
+		// Set light parameters.
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, lightPos, 0);
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, lightColorAmbient, 0);
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, lightColorSpecular, 0);
 
 		super.paint(gl, t, renderMode);
+	}
+
+	@Override
+	protected void paintChildren(GL2 gl, CuboidUniverse t, RenderMode renderMode) {
+		for (RealObject o : t.getChildren())
+			getFactory().paint(gl, RealObject.class, o, renderMode);
 	}
 
 	@Override
@@ -52,14 +49,17 @@ public class CuboidUniversePainter extends AbstractSimplePainter<CuboidUniverse>
 		Vector3f dim = t.getDimensions();
 
 		OpenGLUtils.drawRectangle(gl, dim.x, dim.y, dim.z);
-
-		for (RealObject o : t.getChildren())
-			getFactory().paint(gl, RealObject.class, o, renderMode);
 	}
 
 	@Override
-	protected void setSolid(GL2 gl) {
-		setWireframe(gl);
+	protected void renderOpaqueWireframe(GL2 gl, CuboidUniverse t, RenderMode renderMode, Color4f strokeColor) {
+		setWireframe(gl, t, renderMode, strokeColor);
+		paintObject(gl, t, renderMode);
+	}
+
+	@Override
+	protected void setSolid(GL2 gl, CuboidUniverse t, RenderMode renderMode, Color4f fillColor) {
+		setWireframe(gl, t, renderMode, getStrokeColor());
 	}
 
 }

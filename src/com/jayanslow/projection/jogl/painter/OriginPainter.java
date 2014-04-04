@@ -22,10 +22,13 @@ public class OriginPainter extends AbstractPainter<Origin> {
 
 	@Override
 	public void paint(GL2 gl, Origin t, RenderMode type) {
+		OpenGLUtils.setLighting(gl, false);
+
 		float x = t.getSizeX(), y = t.getSizeY(), z = t.getSizeZ();
 		float arrowSize = x / 5;
 
 		GLUT glut = new GLUT();
+		OpenGLUtils.setPolygonMode(gl, true);
 
 		// Draw x-axis
 		OpenGLUtils.setColor(gl, t.getColorX());

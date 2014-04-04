@@ -1,6 +1,5 @@
 package com.jayanslow.projection.jogl.painter;
 
-import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.vecmath.Color4f;
 import javax.vecmath.Vector3f;
@@ -24,30 +23,31 @@ public class StandardProjectorPainter extends AbstractRealObjectPainter<Standard
 	}
 
 	@Override
-	protected void paintRealObject(GL2 gl, StandardProjector t, RenderMode renderMode) {
+	protected void paintChildren(GL2 gl, StandardProjector t, RenderMode renderMode) {}
+
+	@Override
+	protected void paintObject(GL2 gl, StandardProjector t, RenderMode renderMode) {
 		GLUT glut = new GLUT();
 
 		// Draw Projector Cuboid
-		setWireframe(gl);
 		gl.glPushMatrix();
 		Vector3f dim = t.getDimensions();
 		gl.glTranslatef(-dim.x / 2, -dim.y / 2, -dim.z);
 		OpenGLUtils.drawRectangle(gl, dim.x, dim.y, dim.z);
 		gl.glPopMatrix();
 
-		float originalWidth = OpenGLUtils.getValuef(gl, GL.GL_LINE_WIDTH);
 		// Draw Beam Direction
-		gl.glLineWidth(3);
-		setSolid(gl);
 		float length = dim.z / 2;
 		gl.glPushMatrix();
+
 		gl.glBegin(GL2.GL_LINES);
 		gl.glVertex3f(0, 0, 0);
 		gl.glVertex3f(0, 0, length);
 		gl.glEnd();
+
+		OpenGLUtils.setPolygonMode(gl, true);
 		gl.glTranslatef(0, 0, length);
 		glut.glutSolidCone(length / 12, length / 4, 10, 10);
 		gl.glPopMatrix();
-		gl.glLineWidth(originalWidth);
 	}
 }
