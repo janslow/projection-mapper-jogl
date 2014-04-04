@@ -70,7 +70,7 @@ public class Visualiser extends Frame implements GLEventListener {
 		startPosition.z = -Math.max(dimensions.x, dimensions.y) * 1.5f;
 
 		Rotation3f startRotation = new Rotation3f(0, 0, 0);
-		startRotation.x = (float) Math.tan(startPosition.y / (dimensions.z - startPosition.z));
+		startRotation.x = (float) Math.tan(startPosition.y / (dimensions.z * 1.5f - startPosition.z));
 
 		camera = new Camera(startPosition, startRotation);
 
