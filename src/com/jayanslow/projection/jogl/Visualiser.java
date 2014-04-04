@@ -1,6 +1,8 @@
 package com.jayanslow.projection.jogl;
 
 import java.awt.Frame;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
 import javax.media.opengl.GL;
@@ -81,7 +83,30 @@ public class Visualiser extends Frame implements GLEventListener {
 		addMouseWheelListener(cameraController);
 		addMouseMotionListener(cameraController);
 
+		// Set Up RenderModeController
 		renderMode = RenderMode.WIREFRAME;
+		KeyAdapter renderModeController = new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				setRenderMode(e.getKeyCode());
+			}
+
+			public void setRenderMode(int keyCode) {
+				switch (keyCode) {
+				case KeyEvent.VK_1:
+					renderMode = RenderMode.WIREFRAME;
+					break;
+				case KeyEvent.VK_2:
+					renderMode = RenderMode.OPAQUE_WIREFRAME;
+					break;
+				case KeyEvent.VK_3:
+					renderMode = RenderMode.SOLID;
+					break;
+				}
+			}
+		};
+		canvas.addKeyListener(renderModeController);
+		addKeyListener(renderModeController);
 	}
 
 	@Override
