@@ -66,8 +66,8 @@ public class OpenGLUtils {
 
 	public static void inverseRotate(GL2 gl, Rotation3f rotation) {
 		gl.glRotatef(-(float) Math.toDegrees(rotation.z), 0, 0, 1);
-		gl.glRotatef(-(float) Math.toDegrees(rotation.y), 0, 1, 0);
 		gl.glRotatef(-(float) Math.toDegrees(rotation.x), 1, 0, 0);
+		gl.glRotatef(-(float) Math.toDegrees(rotation.y), 0, 1, 0);
 	}
 
 	public static void negativeTranslate(GL2 gl, Vector3f vector) {
@@ -77,8 +77,8 @@ public class OpenGLUtils {
 	}
 
 	public static void rotate(GL2 gl, Rotation3f rotation) {
-		gl.glRotatef((float) Math.toDegrees(rotation.x), 1, 0, 0);
 		gl.glRotatef((float) Math.toDegrees(rotation.y), 0, 1, 0);
+		gl.glRotatef((float) Math.toDegrees(rotation.x), 1, 0, 0);
 		gl.glRotatef((float) Math.toDegrees(rotation.z), 0, 0, 1);
 	}
 
