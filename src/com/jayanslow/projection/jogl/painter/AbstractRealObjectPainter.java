@@ -17,7 +17,7 @@ public abstract class AbstractRealObjectPainter<T extends RealObject> extends Ab
 	protected void paintObject(GL2 gl, T t, RenderMode renderMode) {
 		gl.glPushMatrix();
 		OpenGLUtils.translate(gl, t.getPosition());
-		// OpenGLUtils.changeAxis(gl, t.getDirection());
+		OpenGLUtils.rotate(gl, t.getRotation());
 		paintRealObject(gl, t, renderMode);
 		gl.glPopMatrix();
 	}

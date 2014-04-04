@@ -19,7 +19,7 @@ public abstract class AbstractFacePainter<T extends Face> extends AbstractSimple
 	protected void paintObject(GL2 gl, T t, RenderMode renderMode) {
 		gl.glPushMatrix();
 		OpenGLUtils.translate(gl, t.getPosition());
-		// OpenGLUtils.changeAxis(gl, t.getDirection());
+		OpenGLUtils.rotate(gl, t.getRotation());
 
 		paintFace(gl, t, renderMode);
 		gl.glPopMatrix();
