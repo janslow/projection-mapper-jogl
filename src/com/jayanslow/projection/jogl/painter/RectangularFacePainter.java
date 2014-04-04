@@ -17,7 +17,7 @@ public class RectangularFacePainter extends AbstractFacePainter<RectangularFace>
 	}
 
 	public RectangularFacePainter(PainterFactory factory) {
-		super(RectangularFace.class, factory, new Color4f(0, 1, 0, 1), new Color4f(0, 1, 0, 1));
+		super(RectangularFace.class, factory, new Color4f(0, 1, 0, 1), new Color4f(1, 1, 1, 1));
 	}
 
 	@Override
