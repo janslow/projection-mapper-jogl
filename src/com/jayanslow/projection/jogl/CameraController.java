@@ -22,8 +22,6 @@ public class CameraController implements KeyListener, MouseWheelListener, MouseM
 
 	private int					lastY		= -1;
 
-	private boolean				enableOrbit;
-
 	private final Camera		camera;
 
 	private final float			speedScale;
@@ -78,7 +76,7 @@ public class CameraController implements KeyListener, MouseWheelListener, MouseM
 			diffY = lastY - y;
 		lastY = y;
 
-		if (enableOrbit) {
+		if (e.isAltDown() || e.isMetaDown()) {
 			camera.pan(diffX * PAN_SPEED);
 			camera.tilt(diffY * TILT_SPEED);
 		}
@@ -117,15 +115,16 @@ public class CameraController implements KeyListener, MouseWheelListener, MouseM
 		case KeyEvent.VK_DOWN:
 			isDownPressed = pressed;
 			break;
-		case KeyEvent.VK_ALT:
-		case KeyEvent.VK_META:
-			enableOrbit = pressed;
-			break;
 		case KeyEvent.VK_SPACE:
 			isSpacePressed = pressed;
 			break;
 		case KeyEvent.VK_SHIFT:
 			isShiftPressed = pressed;
+			break;
+		case KeyEvent.VK_META:
+		case KeyEvent.VK_ALT:
+			if (!pressed)
+				isLeftPressed = isRightPressed = isUpPressed = isDownPressed = isSpacePressed = isShiftPressed = false;
 			break;
 		}
 	}
