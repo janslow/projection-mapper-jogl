@@ -126,6 +126,10 @@ public class Visualiser extends Frame implements GLEventListener {
 		gl.glClearColor(0, 0, 0, 0); // set background (clear) color
 		gl.glClearDepth(1); // set clear depth value to farthest
 		gl.glEnable(GL.GL_DEPTH_TEST); // enables depth testing
+
+		gl.glEnable(GL.GL_LINE_SMOOTH);
+		gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
+
 		gl.glDepthFunc(GL.GL_LEQUAL); // the type of depth test to do
 		gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST); // best perspective correction
 		gl.glShadeModel(GL2.GL_SMOOTH); // blends colors nicely, and smoothes out lighting
