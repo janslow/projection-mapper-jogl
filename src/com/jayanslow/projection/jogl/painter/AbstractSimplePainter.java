@@ -44,9 +44,15 @@ public abstract class AbstractSimplePainter<T> extends AbstractPainter<T> {
 	protected void setSolid(GL2 gl) {
 		gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
 
-		float[] color = new float[4];
-		fillColor.get(color);
-		gl.glColor4fv(color, 0);
+		// Set material properties.
+		float[] rgba = new float[4];
+		fillColor.get(rgba);
+
+		gl.glMaterialfv(GL.GL_FRONT, GL2.GL_AMBIENT, rgba, 0);
+		gl.glMaterialfv(GL.GL_FRONT, GL2.GL_SPECULAR, rgba, 0);
+		gl.glMaterialf(GL.GL_FRONT, GL2.GL_SHININESS, 0.5f);
+
+		gl.glColor4fv(rgba, 0);
 	}
 
 	protected void setWireframe(GL2 gl) {

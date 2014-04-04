@@ -104,31 +104,6 @@ public class Visualiser extends Frame implements GLEventListener {
 		gl.glDepthFunc(GL.GL_LEQUAL); // the type of depth test to do
 		gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST); // best perspective correction
 		gl.glShadeModel(GL2.GL_SMOOTH); // blends colors nicely, and smoothes out lighting
-
-		gl.glEnable(GL2.GL_LIGHTING);
-		gl.glEnable(GL2.GL_LIGHT0);
-	}
-
-	private void light(GL2 gl) {
-		float SHINE_ALL_DIRECTIONS = 1;
-		float[] lightPos = { 0, 0, 0, SHINE_ALL_DIRECTIONS };
-		float[] lightColorAmbient = { 0.2f, 0.2f, 0.2f, 1f };
-		float[] lightColorSpecular = { 0.8f, 0.8f, 0.8f, 1f };
-
-		// Set light parameters.
-		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, lightPos, 0);
-		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, lightColorAmbient, 0);
-		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, lightColorSpecular, 0);
-
-		// Enable lighting in GL.
-		gl.glEnable(GL2.GL_LIGHT1);
-		gl.glEnable(GL2.GL_LIGHTING);
-
-		// Set material properties.
-		float[] rgba = { 0.3f, 0.5f, 1f };
-		gl.glMaterialfv(GL.GL_FRONT, GL2.GL_AMBIENT, rgba, 0);
-		gl.glMaterialfv(GL.GL_FRONT, GL2.GL_SPECULAR, rgba, 0);
-		gl.glMaterialf(GL.GL_FRONT, GL2.GL_SHININESS, 0.5f);
 	}
 
 	private void render(GL2 gl) {
@@ -140,8 +115,6 @@ public class Visualiser extends Frame implements GLEventListener {
 
 		gl.glPushMatrix();
 		gl.glScalef(1, 1, -1);
-
-		light(gl);
 
 		f.paint(gl, universe);
 		f.paint(gl, Origin.class, new Origin(camera.getPosition().length() / 10), RenderMode.WIREFRAME);
