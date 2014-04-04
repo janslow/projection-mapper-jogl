@@ -78,13 +78,17 @@ public class Visualiser extends Frame implements GLEventListener {
 		canvas.addKeyListener(cameraController);
 		canvas.addMouseWheelListener(cameraController);
 		canvas.addMouseMotionListener(cameraController);
+		addKeyListener(cameraController);
+		addMouseWheelListener(cameraController);
+		addMouseMotionListener(cameraController);
 
 	}
 
 	@Override
 	public void display(GLAutoDrawable drawable) {
+		GL2 gl = drawable.getGL().getGL2(); // get the OpenGL graphics context
 		update();
-		render(drawable);
+		render(gl);
 	}
 
 	@Override
@@ -102,8 +106,7 @@ public class Visualiser extends Frame implements GLEventListener {
 		gl.glShadeModel(GL2.GL_SMOOTH); // blends colors nicely, and smoothes out lighting
 	}
 
-	private void render(GLAutoDrawable drawable) {
-		GL2 gl = drawable.getGL().getGL2(); // get the OpenGL 2 graphics context
+	private void render(GL2 gl) {
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
 		gl.glLoadIdentity(); // reset the model-view matrix
 
