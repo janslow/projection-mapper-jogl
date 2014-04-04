@@ -4,10 +4,10 @@ import javax.media.opengl.GL2;
 import javax.vecmath.Color4f;
 import javax.vecmath.Vector3f;
 
+import com.jayanslow.projection.jogl.RenderMode;
 import com.jayanslow.projection.jogl.utils.OpenGLUtils;
 import com.jayanslow.projection.world.models.CuboidUniverse;
 import com.jayanslow.projection.world.models.RealObject;
-import com.jayanslow.projection.world.models.RenderMode;
 
 public class CuboidUniversePainter extends AbstractSimplePainter<CuboidUniverse> {
 	public static boolean register(PainterFactory f) {

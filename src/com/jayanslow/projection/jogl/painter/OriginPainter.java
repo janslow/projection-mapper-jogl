@@ -3,8 +3,8 @@ package com.jayanslow.projection.jogl.painter;
 import javax.media.opengl.GL2;
 
 import com.jayanslow.projection.jogl.Origin;
+import com.jayanslow.projection.jogl.RenderMode;
 import com.jayanslow.projection.jogl.utils.OpenGLUtils;
-import com.jayanslow.projection.world.models.RenderMode;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 public class OriginPainter extends AbstractPainter<Origin> {

@@ -3,8 +3,8 @@ package com.jayanslow.projection.jogl.painter;
 import javax.media.opengl.GL2;
 import javax.vecmath.Color4f;
 
+import com.jayanslow.projection.jogl.RenderMode;
 import com.jayanslow.projection.world.models.Face;
-import com.jayanslow.projection.world.models.RenderMode;
 import com.jayanslow.projection.world.models.Screen;
 
 public abstract class AbstractScreenPainter<T extends Screen> extends AbstractRealObjectPainter<T> {

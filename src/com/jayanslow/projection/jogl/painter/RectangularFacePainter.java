@@ -4,8 +4,8 @@ import javax.media.opengl.GL2;
 import javax.vecmath.Color4f;
 import javax.vecmath.Vector2f;
 
+import com.jayanslow.projection.jogl.RenderMode;
 import com.jayanslow.projection.world.models.RectangularFace;
-import com.jayanslow.projection.world.models.RenderMode;
 
 public class RectangularFacePainter extends AbstractFacePainter<RectangularFace> {
 	public static boolean register(PainterFactory f) {

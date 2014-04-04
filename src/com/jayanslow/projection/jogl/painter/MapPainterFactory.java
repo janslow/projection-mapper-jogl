@@ -4,8 +4,7 @@ import java.util.Map;
 
 import javax.media.opengl.GL2;
 
-import com.jayanslow.projection.world.models.RenderMode;
-import com.jayanslow.projection.world.models.Universe;
+import com.jayanslow.projection.jogl.RenderMode;
 
 public class MapPainterFactory implements PainterFactory {
 
@@ -40,10 +39,5 @@ public class MapPainterFactory implements PainterFactory {
 	@Override
 	public <T> void paint(GL2 gl, Class<T> type, T t, RenderMode renderType) {
 		getPainter(type).paint(gl, t, renderType);
-	}
-
-	@Override
-	public void paint(GL2 gl, Universe universe) {
-		paint(gl, Universe.class, universe, universe.getRenderMode());
 	}
 }

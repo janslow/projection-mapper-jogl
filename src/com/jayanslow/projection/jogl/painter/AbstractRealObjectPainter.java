@@ -3,9 +3,9 @@ package com.jayanslow.projection.jogl.painter;
 import javax.media.opengl.GL2;
 import javax.vecmath.Color4f;
 
+import com.jayanslow.projection.jogl.RenderMode;
 import com.jayanslow.projection.jogl.utils.OpenGLUtils;
 import com.jayanslow.projection.world.models.RealObject;
-import com.jayanslow.projection.world.models.RenderMode;
 
 public abstract class AbstractRealObjectPainter<T extends RealObject> extends AbstractSimplePainter<T> {
 

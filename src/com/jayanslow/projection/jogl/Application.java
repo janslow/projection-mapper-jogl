@@ -12,7 +12,6 @@ import com.jayanslow.projection.world.models.CuboidScreen;
 import com.jayanslow.projection.world.models.CuboidUniverse;
 import com.jayanslow.projection.world.models.FlatScreen;
 import com.jayanslow.projection.world.models.RealObject;
-import com.jayanslow.projection.world.models.RenderMode;
 import com.jayanslow.projection.world.models.Rotation3f;
 import com.jayanslow.projection.world.models.StandardProjector;
 import com.jayanslow.projection.world.models.Universe;
@@ -36,7 +35,7 @@ public class Application {
 	public static Universe makeSampleWorld() {
 		int id = 0;
 		final Collection<RealObject> objects = new LinkedList<RealObject>();
-		final Universe universe = new CuboidUniverse(new Vector3f(5000, 5000, 5000), objects, RenderMode.WIREFRAME);
+		final Universe universe = new CuboidUniverse(new Vector3f(5000, 5000, 5000), objects);
 
 		int projector = 0;
 		objects.add(new StandardProjector(id++, projector++, new Vector3f(2500, 4000, 0), new Rotation3f(

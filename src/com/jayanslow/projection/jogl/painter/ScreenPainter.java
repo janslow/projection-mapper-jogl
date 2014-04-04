@@ -2,9 +2,9 @@ package com.jayanslow.projection.jogl.painter;
 
 import javax.media.opengl.GL2;
 
+import com.jayanslow.projection.jogl.RenderMode;
 import com.jayanslow.projection.world.models.CuboidScreen;
 import com.jayanslow.projection.world.models.FlatScreen;
-import com.jayanslow.projection.world.models.RenderMode;
 import com.jayanslow.projection.world.models.Screen;
 
 public class ScreenPainter extends AbstractPainter<Screen> {

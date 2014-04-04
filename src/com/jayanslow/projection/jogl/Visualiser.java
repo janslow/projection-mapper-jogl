@@ -18,7 +18,6 @@ import com.jayanslow.projection.jogl.painter.OriginPainter;
 import com.jayanslow.projection.jogl.painter.Painter;
 import com.jayanslow.projection.jogl.painter.PainterFactory;
 import com.jayanslow.projection.jogl.painter.UniversePainter;
-import com.jayanslow.projection.world.models.RenderMode;
 import com.jayanslow.projection.world.models.Rotation3f;
 import com.jayanslow.projection.world.models.Universe;
 import com.jogamp.opengl.util.FPSAnimator;
@@ -43,6 +42,8 @@ public class Visualiser extends Frame implements GLEventListener {
 
 	private final CameraController	cameraController;
 
+	private RenderMode				renderMode;
+
 	public Visualiser(Universe universe) {
 		super();
 		this.universe = universe;
@@ -56,24 +57,22 @@ public class Visualiser extends Frame implements GLEventListener {
 		final GLCanvas canvas = new GLCanvas(caps);
 
 		add(canvas);
-
 		canvas.addGLEventListener(this);
 
 		final FPSAnimator animator = new FPSAnimator(canvas, 60);
 		animator.start();
 
+		// Set Up Camera
 		Vector3f dimensions = universe.getDimensions();
-
 		Vector3f startPosition = new Vector3f();
 		startPosition.x = dimensions.x * 0.5f;
 		startPosition.y = dimensions.y * 1.2f;
 		startPosition.z = -Math.max(dimensions.x, dimensions.y) * 1.5f;
-
 		Rotation3f startRotation = new Rotation3f(0, 0, 0);
 		startRotation.x = (float) Math.tan(startPosition.y / (dimensions.z * 1.5f - startPosition.z));
-
 		camera = new Camera(startPosition, startRotation);
 
+		// Set Up CameraController
 		cameraController = new CameraController(camera, 100);
 		canvas.addKeyListener(cameraController);
 		canvas.addMouseWheelListener(cameraController);
@@ -82,6 +81,7 @@ public class Visualiser extends Frame implements GLEventListener {
 		addMouseWheelListener(cameraController);
 		addMouseMotionListener(cameraController);
 
+		renderMode = RenderMode.WIREFRAME;
 	}
 
 	@Override
@@ -116,8 +116,8 @@ public class Visualiser extends Frame implements GLEventListener {
 		gl.glPushMatrix();
 		gl.glScalef(1, 1, -1);
 
-		f.paint(gl, universe);
-		f.paint(gl, Origin.class, new Origin(camera.getPosition().length() / 10), RenderMode.WIREFRAME);
+		f.paint(gl, Universe.class, universe, renderMode);
+		f.paint(gl, Origin.class, new Origin(camera.getPosition().length() / 10), renderMode);
 		gl.glPopMatrix();
 
 		gl.glPopMatrix();

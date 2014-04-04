@@ -4,7 +4,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.vecmath.Color4f;
 
-import com.jayanslow.projection.world.models.RenderMode;
+import com.jayanslow.projection.jogl.RenderMode;
 
 public abstract class AbstractSimplePainter<T> extends AbstractPainter<T> {
 	private final Color4f	strokeColor;

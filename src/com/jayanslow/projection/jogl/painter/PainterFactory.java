@@ -2,8 +2,7 @@ package com.jayanslow.projection.jogl.painter;
 
 import javax.media.opengl.GL2;
 
-import com.jayanslow.projection.world.models.RenderMode;
-import com.jayanslow.projection.world.models.Universe;
+import com.jayanslow.projection.jogl.RenderMode;
 
 public interface PainterFactory {
 	/**
@@ -35,14 +34,4 @@ public interface PainterFactory {
 	 *            Object display type
 	 */
 	public <T> void paint(GL2 gl, Class<T> type, T t, RenderMode display);
-
-	/**
-	 * Paints a universe
-	 * 
-	 * @param gl
-	 *            OpenGL canvas to paint on
-	 * @param universe
-	 *            Universe to paint
-	 */
-	public void paint(GL2 gl, Universe universe);
 }

@@ -2,9 +2,9 @@ package com.jayanslow.projection.jogl.painter;
 
 import javax.media.opengl.GL2;
 
+import com.jayanslow.projection.jogl.RenderMode;
 import com.jayanslow.projection.world.models.Face;
 import com.jayanslow.projection.world.models.RectangularFace;
-import com.jayanslow.projection.world.models.RenderMode;
 
 public class FacePainter extends AbstractPainter<Face> {
 	public static boolean register(PainterFactory f) {

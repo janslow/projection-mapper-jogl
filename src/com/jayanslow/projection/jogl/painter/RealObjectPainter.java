@@ -2,9 +2,9 @@ package com.jayanslow.projection.jogl.painter;
 
 import javax.media.opengl.GL2;
 
+import com.jayanslow.projection.jogl.RenderMode;
 import com.jayanslow.projection.world.models.Projector;
 import com.jayanslow.projection.world.models.RealObject;
-import com.jayanslow.projection.world.models.RenderMode;
 import com.jayanslow.projection.world.models.Screen;
 
 public class RealObjectPainter extends AbstractPainter<RealObject> {

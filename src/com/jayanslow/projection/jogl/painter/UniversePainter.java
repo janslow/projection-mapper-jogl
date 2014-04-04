@@ -2,8 +2,8 @@ package com.jayanslow.projection.jogl.painter;
 
 import javax.media.opengl.GL2;
 
+import com.jayanslow.projection.jogl.RenderMode;
 import com.jayanslow.projection.world.models.CuboidUniverse;
-import com.jayanslow.projection.world.models.RenderMode;
 import com.jayanslow.projection.world.models.Universe;
 
 public class UniversePainter extends AbstractPainter<Universe> {

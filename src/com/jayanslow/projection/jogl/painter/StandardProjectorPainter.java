@@ -5,8 +5,8 @@ import javax.media.opengl.GL2;
 import javax.vecmath.Color4f;
 import javax.vecmath.Vector3f;
 
+import com.jayanslow.projection.jogl.RenderMode;
 import com.jayanslow.projection.jogl.utils.OpenGLUtils;
-import com.jayanslow.projection.world.models.RenderMode;
 import com.jayanslow.projection.world.models.StandardProjector;
 import com.jogamp.opengl.util.gl2.GLUT;
 
