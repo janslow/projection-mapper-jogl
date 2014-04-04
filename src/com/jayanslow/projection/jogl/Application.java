@@ -40,13 +40,13 @@ public class Application {
 
 		int projector = 0;
 		objects.add(new StandardProjector(id++, projector++, new Vector3f(2500, 4000, 0), new Rotation3f(
-				(float) -Math.PI / 6, 0, 0), new Vector3f(300, 160, 450), 768, 1024, 3));
+				(float) Math.PI / 6, 0, 0), new Vector3f(300, 160, 450), 768, 1024, 3));
 		objects.add(new StandardProjector(id++, projector++, new Vector3f(0, 5000, 3000), new Rotation3f(
-				(float) -Math.PI / 4, (float) -Math.PI / 4, 0), new Vector3f(300, 160, 450), 768, 1024, 1));
+				(float) Math.PI / 4, (float) Math.PI / 4, 0), new Vector3f(300, 160, 450), 768, 1024, 1));
 
 		int screen = 0;
-		objects.add(new FlatScreen(id++, screen++, new Vector3f(500, 500, 5000), new Rotation3f(), new Vector2f(4000,
-				4000)));
+		objects.add(new FlatScreen(id++, screen++, new Vector3f(4500, 500, 5000),
+				new Rotation3f(0, (float) Math.PI, 0), new Vector2f(4000, 4000)));
 		objects.add(new CuboidScreen(id++, screen++, new Vector3f(2000, 0, 3500), new Rotation3f(0,
 				(float) Math.PI / 4, 0), new Vector3f(1000, 1000, 1000)));
 
