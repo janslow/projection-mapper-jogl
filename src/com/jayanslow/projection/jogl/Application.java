@@ -2,8 +2,8 @@ package com.jayanslow.projection.jogl;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
@@ -34,7 +34,7 @@ public class Application {
 
 	public static Universe makeSampleWorld() {
 		int id = 0;
-		final Collection<RealObject> objects = new LinkedList<RealObject>();
+		final List<RealObject> objects = new LinkedList<RealObject>();
 		final Universe universe = new CuboidUniverse(new Vector3f(5000, 5000, 5000), objects);
 
 		int projector = 0;
