@@ -8,6 +8,10 @@ import java.util.List;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 
+import com.jayanslow.projection.world.controllers.HashMapWorldController;
+import com.jayanslow.projection.world.controllers.WorldController;
+import com.jayanslow.projection.world.editor.controller.EditorController;
+import com.jayanslow.projection.world.editor.controller.StandardEditorController;
 import com.jayanslow.projection.world.models.CuboidScreen;
 import com.jayanslow.projection.world.models.CuboidUniverse;
 import com.jayanslow.projection.world.models.FlatScreen;
@@ -19,8 +23,9 @@ import com.jayanslow.projection.world.models.Universe;
 public class Application {
 
 	public static void main(String[] args) {
+		WorldController world = makeSampleWorld();
 
-		final Visualiser v = new Visualiser(makeSampleWorld());
+		final MasterVisualiser v = new MasterVisualiser(world);
 		v.setSize(500, 500);
 		v.setVisible(true);
 
@@ -30,9 +35,16 @@ public class Application {
 				System.exit(0);
 			}
 		});
+
+		final ProjectorVisualiser p1 = new ProjectorVisualiser(world, world.getProjector(0), RenderMode.SOLID);
+		p1.setSize(500, 500);
+		p1.setVisible(true);
+
+		final EditorController c = new StandardEditorController(world);
+		c.editUniverse();
 	}
 
-	public static Universe makeSampleWorld() {
+	public static WorldController makeSampleWorld() {
 		int id = 0;
 		final List<RealObject> objects = new LinkedList<RealObject>();
 		final Universe universe = new CuboidUniverse(new Vector3f(5000, 5000, 5000), objects);
@@ -49,6 +61,6 @@ public class Application {
 		objects.add(new CuboidScreen(id++, screen++, new Vector3f(2000, 0, 3500), new Rotation3f(0,
 				(float) Math.PI / 4, 0), new Vector3f(1000, 1000, 1000)));
 
-		return universe;
+		return new HashMapWorldController(universe);
 	}
 }

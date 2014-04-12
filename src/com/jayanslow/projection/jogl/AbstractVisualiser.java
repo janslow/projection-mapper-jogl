@@ -22,24 +22,12 @@ import com.jayanslow.projection.jogl.painter.OriginPainter;
 import com.jayanslow.projection.jogl.painter.Painter;
 import com.jayanslow.projection.jogl.painter.PainterFactory;
 import com.jayanslow.projection.jogl.painter.UniversePainter;
-import com.jayanslow.projection.world.models.Rotation3f;
+import com.jayanslow.projection.world.controllers.WorldController;
 import com.jayanslow.projection.world.models.Universe;
 import com.jogamp.opengl.util.FPSAnimator;
 
 public abstract class AbstractVisualiser extends Frame implements GLEventListener {
 	private static final long	serialVersionUID	= 1864514209659235403L;
-
-	private static Camera setUpCamera(Universe universe) {
-		// Set Up Camera
-		Vector3f dimensions = universe.getDimensions();
-		Vector3f startPosition = new Vector3f();
-		startPosition.x = dimensions.x * 0.5f;
-		startPosition.y = dimensions.y * 1.2f;
-		startPosition.z = -Math.max(dimensions.x, dimensions.y) * 1.5f;
-		Rotation3f startRotation = new Rotation3f(0, 0, 0);
-		startRotation.x = (float) Math.tan(startPosition.y / (dimensions.z * 1.5f - startPosition.z));
-		return new Camera(startPosition, startRotation);
-	}
 
 	private static PainterFactory setUpPainterFactory() {
 		PainterFactory f = new MapPainterFactory(new HashMap<Class<?>, Painter<?>>());
@@ -50,31 +38,21 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 		return f;
 	}
 
-	private final Universe			universe;
+	private final WorldController	world;
 	private final PainterFactory	f;
 	private GLU						glu;
-	private final Camera			camera;
-
-	private RenderMode				renderMode;
 
 	private final GLCanvas			canvas;
 	private final FPSAnimator		animator;
 
-	public AbstractVisualiser(Universe universe, String title) {
-		this(universe, title, setUpCamera(universe));
+	public AbstractVisualiser(WorldController world, String title) {
+		this(world, title, setUpPainterFactory());
 	}
 
-	public AbstractVisualiser(Universe universe, String title, Camera camera) {
-		this(universe, title, camera, setUpPainterFactory());
-	}
-
-	public AbstractVisualiser(Universe universe, String title, Camera camera, PainterFactory f) {
+	public AbstractVisualiser(WorldController world, String title, PainterFactory f) {
 		super(title);
-		this.universe = universe;
-		this.camera = camera;
+		this.world = world;
 		this.f = f;
-
-		renderMode = RenderMode.OPAQUE_WIREFRAME;
 
 		final GLProfile glp = GLProfile.getDefault();
 		final GLCapabilities caps = new GLCapabilities(glp);
@@ -87,10 +65,6 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 		animator.start();
 		animator.setUpdateFPSFrames(3, null);
 
-	}
-
-	public AbstractVisualiser(Universe universe, String title, PainterFactory f) {
-		this(universe, title, setUpCamera(universe), f);
 	}
 
 	@Override
@@ -127,9 +101,7 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 	@Override
 	public void dispose(GLAutoDrawable drawable) {}
 
-	protected Camera getCamera() {
-		return camera;
-	}
+	public abstract Camera getCamera();
 
 	public float getFPS() {
 		return animator.getLastFPS();
@@ -139,12 +111,10 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 		return f;
 	}
 
-	public RenderMode getRenderMode() {
-		return renderMode;
-	}
+	protected abstract RenderMode getRenderMode();
 
-	public Universe getUniverse() {
-		return universe;
+	public WorldController getWorld() {
+		return world;
 	}
 
 	@Override
@@ -164,6 +134,8 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 	}
 
 	private void render(GL2 gl) {
+		Camera camera = getCamera();
+
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
 		gl.glLoadIdentity(); // reset the model-view matrix
 
@@ -176,8 +148,8 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 		gl.glPushMatrix();
 		gl.glScalef(1, 1, -1);
 
-		f.paint(gl, Universe.class, universe, renderMode);
-		f.paint(gl, Origin.class, new Origin(camera.getPosition().length() / 10), renderMode);
+		f.paint(gl, Universe.class, world.getUniverse(), getRenderMode());
+		f.paint(gl, Origin.class, new Origin(camera.getPosition().length() / 10), getRenderMode());
 		gl.glPopMatrix();
 
 		gl.glPopMatrix();
@@ -204,9 +176,5 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 		gl.glLoadIdentity(); // reset
 	}
 
-	public void setRenderMode(RenderMode renderMode) {
-		this.renderMode = renderMode;
-	}
-
-	protected abstract void update();
+	protected abstract boolean update();
 }
