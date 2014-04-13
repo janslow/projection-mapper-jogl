@@ -4,6 +4,8 @@ import javax.vecmath.Vector3f;
 
 public interface Camera {
 
+	public void addCameraListener(CameraListener l);
+
 	public float getAspectRatio();
 
 	public Vector3f getCentre(float distance);

@@ -107,7 +107,11 @@ public class StandaloneCamera extends AbstractCamera {
 		if (position == null)
 			throw new NullPointerException();
 
+		Vector3f old = new Vector3f(this.position);
+
 		this.position.set(position);
+
+		fireCameraMove(old);
 	}
 
 	public void setResolution(int height, int width) throws IllegalArgumentException {
@@ -116,15 +120,23 @@ public class StandaloneCamera extends AbstractCamera {
 		if (width < 1)
 			throw new IllegalArgumentException("Width must be a positive integer");
 
+		int oldHeight = resolutionHeight, oldWidth = resolutionWidth;
+
 		resolutionHeight = height;
 		resolutionWidth = width;
+
+		fireCameraChangeResolution(oldHeight, oldWidth);
 	}
 
 	public void setRotation(Rotation3f rotation) {
 		if (rotation == null)
 			throw new NullPointerException();
 
+		Rotation3f old = new Rotation3f(rotation);
+
 		rotation.set(rotation);
+
+		fireCameraRotate(old);
 	}
 
 	public void tilt(float dTilt) {
