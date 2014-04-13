@@ -25,8 +25,7 @@ public class Application {
 	public static void main(String[] args) {
 		WorldController world = makeSampleWorld();
 
-		final MasterVisualiser v = new MasterVisualiser(world);
-		v.setSize(500, 500);
+		final MasterVisualiser v = new MasterVisualiser(world, 500, 500);
 		v.setVisible(true);
 
 		v.addWindowListener(new WindowAdapter() {
@@ -37,7 +36,6 @@ public class Application {
 		});
 
 		final ProjectorVisualiser p1 = new ProjectorVisualiser(world, world.getProjector(0), RenderMode.SOLID);
-		p1.setSize(500, 500);
 		p1.setVisible(true);
 
 		final EditorController c = new StandardEditorController(world);

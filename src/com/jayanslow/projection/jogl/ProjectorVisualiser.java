@@ -13,7 +13,8 @@ public class ProjectorVisualiser extends AbstractVisualiser {
 	private RenderMode				renderMode;
 
 	public ProjectorVisualiser(WorldController world, Projector projector, RenderMode renderMode) {
-		super(world, String.format("Projector #%s", projector.getProjectorId()));
+		super(world, String.format("Projector #%s", projector.getProjectorId()), projector.getResolutionHeight(),
+				projector.getResolutionWidth());
 
 		camera = new ProjectorCamera(projector);
 		this.renderMode = renderMode;

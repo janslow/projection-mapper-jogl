@@ -14,9 +14,28 @@ public class ProjectorCamera extends AbstractCamera {
 		this.projector = projector;
 	}
 
+	private float calculateFOV(float throwRatio, float aspectRatio) {
+		return (float) (2 * Math.atan(throwRatio / aspectRatio));
+	}
+
+	@Override
+	public float getFieldOfView() {
+		return calculateFOV(projector.getThrowRatio(), getAspectRatio());
+	}
+
 	@Override
 	public Vector3f getPosition() {
 		return projector.getPosition();
+	}
+
+	@Override
+	public int getResolutionHeight() {
+		return projector.getResolutionHeight();
+	}
+
+	@Override
+	public int getResolutionWidth() {
+		return projector.getResolutionWidth();
 	}
 
 	@Override

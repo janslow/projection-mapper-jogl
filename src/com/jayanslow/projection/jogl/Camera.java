@@ -4,10 +4,17 @@ import javax.vecmath.Vector3f;
 
 public interface Camera {
 
+	public float getAspectRatio();
+
 	public Vector3f getCentre(float distance);
+
+	public float getFieldOfView();
 
 	public Vector3f getPosition();
 
-	public Vector3f getUp();
+	public int getResolutionHeight();
 
+	public int getResolutionWidth();
+
+	public Vector3f getUp();
 }

@@ -11,7 +11,7 @@ import com.jayanslow.projection.world.models.Rotation3f;
 public class MasterVisualiser extends AbstractVisualiser {
 	private static final long	serialVersionUID	= -97103914923218634L;
 
-	private static StandaloneCamera setUpCamera(Vector3f dimensions) {
+	private static StandaloneCamera setUpCamera(Vector3f dimensions, int resolutionHeight, int resolutionWidth) {
 		// Set Up Camera
 		Vector3f startPosition = new Vector3f();
 		startPosition.x = dimensions.x * 0.5f;
@@ -19,21 +19,22 @@ public class MasterVisualiser extends AbstractVisualiser {
 		startPosition.z = -Math.max(dimensions.x, dimensions.y) * 1.5f;
 		Rotation3f startRotation = new Rotation3f(0, 0, 0);
 		startRotation.x = (float) Math.tan(startPosition.y / (dimensions.z * 1.5f - startPosition.z));
-		return new StandaloneCamera(startPosition, startRotation);
+		return new StandaloneCamera(startPosition, startRotation, resolutionHeight, resolutionWidth);
 	}
 
 	final CameraController			cameraController;
 	private final StandaloneCamera	camera;
 	private RenderMode				renderMode;
 
-	public MasterVisualiser(WorldController world) {
-		this(world, RenderMode.OPAQUE_WIREFRAME);
+	public MasterVisualiser(WorldController world, int height, int width) {
+		this(world, height, width, RenderMode.OPAQUE_WIREFRAME);
 	}
 
-	public MasterVisualiser(WorldController world, RenderMode renderMode) {
-		super(world, "Universe");
+	public MasterVisualiser(WorldController world, int height, int width, RenderMode renderMode) {
+		super(world, "Universe", height, width);
 
-		camera = setUpCamera(world.getUniverse().getDimensions());
+		camera = setUpCamera(world.getUniverse().getDimensions(), height, width);
+
 		this.renderMode = renderMode;
 
 		// Set Up CameraController

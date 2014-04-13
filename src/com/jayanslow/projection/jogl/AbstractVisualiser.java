@@ -1,5 +1,6 @@
 package com.jayanslow.projection.jogl;
 
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
@@ -39,17 +40,19 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 	}
 
 	private final WorldController	world;
+
 	private final PainterFactory	f;
+
 	private GLU						glu;
 
 	private final GLCanvas			canvas;
 	private final FPSAnimator		animator;
 
-	public AbstractVisualiser(WorldController world, String title) {
-		this(world, title, setUpPainterFactory());
+	public AbstractVisualiser(WorldController world, String title, int height, int width) {
+		this(world, title, height, width, setUpPainterFactory());
 	}
 
-	public AbstractVisualiser(WorldController world, String title, PainterFactory f) {
+	public AbstractVisualiser(WorldController world, String title, int height, int width, PainterFactory f) {
 		super(title);
 		this.world = world;
 		this.f = f;
@@ -60,11 +63,13 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 
 		add(canvas);
 		canvas.addGLEventListener(this);
+		canvas.setPreferredSize(new Dimension(width, height));
 
 		animator = new FPSAnimator(canvas, 60);
 		animator.start();
 		animator.setUpdateFPSFrames(3, null);
 
+		pack();
 	}
 
 	@Override
@@ -155,10 +160,11 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 		gl.glPopMatrix();
 	}
 
-	@Override
-	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-		GL2 gl = drawable.getGL().getGL2(); // get the OpenGL 2 graphics context
+	private void reshape(GL2 gl, Camera camera) {
+		reshape(gl, camera.getResolutionHeight(), camera.getResolutionWidth());
+	}
 
+	private void reshape(GL2 gl, int height, int width) {
 		if (height == 0)
 			height = 1; // prevent divide by zero
 		float aspect = (float) width / height;
@@ -169,11 +175,19 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 		// Setup perspective projection, with aspect ratio matches viewport
 		gl.glMatrixMode(GL2.GL_PROJECTION); // choose projection matrix
 		gl.glLoadIdentity(); // reset projection matrix
-		glu.gluPerspective(45.0, aspect, 1, 100000.0); // fovy, aspect, zNear, zFar
+		glu.gluPerspective(Math.toDegrees(getCamera().getFieldOfView()), aspect, 1, 100000.0); // fovy, aspect, zNear,
+																								// zFar
 
 		// Enable the model-view transform
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity(); // reset
+	}
+
+	@Override
+	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+		GL2 gl = drawable.getGL().getGL2(); // get the OpenGL 2 graphics context
+
+		reshape(gl, height, width);
 	}
 
 	protected abstract boolean update();

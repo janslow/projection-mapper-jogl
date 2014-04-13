@@ -12,6 +12,14 @@ public abstract class AbstractCamera implements Camera {
 	}
 
 	@Override
+	public float getAspectRatio() {
+		float height = getResolutionHeight();
+		if (height <= 0)
+			height = 1;
+		return getResolutionWidth() / height;
+	}
+
+	@Override
 	public Vector3f getCentre(float distance) {
 		Vector3f center = new Vector3f(0, 0, 1);
 		getRotation().rotate(center);
