@@ -4,10 +4,10 @@ import javax.vecmath.Vector3f;
 
 public interface Camera {
 
-	public abstract Vector3f getCentre(float distance);
+	public Vector3f getCentre(float distance);
 
-	public abstract Vector3f getPosition();
+	public Vector3f getPosition();
 
-	public abstract Vector3f getUp();
+	public Vector3f getUp();
 
 }
