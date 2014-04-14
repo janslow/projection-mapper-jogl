@@ -34,6 +34,7 @@ public class MasterVisualiser extends AbstractVisualiser {
 		super(world, "Universe", height, width);
 
 		camera = setUpCamera(world.getUniverse().getDimensions(), height, width);
+		camera.addCameraListener(this);
 
 		this.renderMode = renderMode;
 

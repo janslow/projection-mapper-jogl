@@ -17,7 +17,7 @@ import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLException;
 import javax.media.opengl.GLProfile;
-import javax.media.opengl.awt.GLCanvas;
+import javax.media.opengl.awt.GLJPanel;
 import javax.media.opengl.glu.GLU;
 import javax.vecmath.Vector3f;
 
@@ -27,13 +27,14 @@ import com.jayanslow.projection.jogl.painter.Painter;
 import com.jayanslow.projection.jogl.painter.PainterFactory;
 import com.jayanslow.projection.jogl.painter.UniversePainter;
 import com.jayanslow.projection.world.controllers.WorldController;
+import com.jayanslow.projection.world.models.Rotation3f;
 import com.jayanslow.projection.world.models.Universe;
 import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.GLReadBufferUtil;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
-public abstract class AbstractVisualiser extends Frame implements GLEventListener {
+public abstract class AbstractVisualiser extends Frame implements GLEventListener, CameraListener {
 	private static final long	serialVersionUID	= 1864514209659235403L;
 
 	private static PainterFactory setUpPainterFactory() {
@@ -51,9 +52,10 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 
 	private GLU						glu;
 
-	private final GLCanvas			canvas;
+	private final GLJPanel			canvas;
 
 	private final FPSAnimator		animator;
+	private boolean					markDirty		= false;
 
 	private File					outputFile;
 	private boolean					saveNextFrame	= false;
@@ -69,7 +71,7 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 
 		final GLProfile glp = GLProfile.getDefault();
 		final GLCapabilities caps = new GLCapabilities(glp);
-		canvas = new GLCanvas(caps);
+		canvas = new GLJPanel(caps);
 
 		add(canvas);
 		canvas.addGLEventListener(this);
@@ -107,8 +109,34 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 	}
 
 	@Override
+	public void cameraChangeFieldOfView(Camera camera, float old) {
+		markDirty = true;
+	}
+
+	@Override
+	public void cameraChangeResolution(Camera camera, int oldHeight, int oldWidth) {
+		markDirty = true;
+
+		int height = camera.getResolutionHeight(), width = camera.getResolutionWidth();
+		setSize(getWidth() - oldWidth + width, getHeight() - oldHeight + height);
+		canvas.setPreferredSize(new Dimension(width, height));
+		pack();
+	}
+
+	@Override
+	public void cameraMove(Camera camera, Vector3f old) {}
+
+	@Override
+	public void cameraRotate(Camera camera, Rotation3f old) {}
+
+	@Override
 	public void display(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2(); // get the OpenGL graphics context
+
+		if (markDirty) {
+			reshape(gl, getCamera());
+			markDirty = false;
+		}
 		update();
 		render(gl);
 		if (saveNextFrame) {

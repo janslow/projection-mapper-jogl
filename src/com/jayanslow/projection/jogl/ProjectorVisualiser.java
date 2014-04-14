@@ -17,6 +17,7 @@ public class ProjectorVisualiser extends AbstractVisualiser {
 				projector.getResolutionWidth());
 
 		camera = new ProjectorCamera(projector);
+		camera.addCameraListener(this);
 		this.renderMode = renderMode;
 	}
 
