@@ -42,7 +42,7 @@ public class ProjectorCamera extends AbstractCamera {
 	}
 
 	private float calculateFOV(float throwRatio, float aspectRatio) {
-		return (float) (2 * Math.atan(throwRatio / aspectRatio));
+		return (float) (2 * Math.atan(1 / throwRatio / aspectRatio));
 	}
 
 	@Override
