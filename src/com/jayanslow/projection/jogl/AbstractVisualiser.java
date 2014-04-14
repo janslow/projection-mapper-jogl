@@ -6,6 +6,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import javax.media.opengl.GL;
@@ -13,6 +15,7 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
+import javax.media.opengl.GLException;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.glu.GLU;
@@ -26,6 +29,9 @@ import com.jayanslow.projection.jogl.painter.UniversePainter;
 import com.jayanslow.projection.world.controllers.WorldController;
 import com.jayanslow.projection.world.models.Universe;
 import com.jogamp.opengl.util.FPSAnimator;
+import com.jogamp.opengl.util.GLReadBufferUtil;
+import com.jogamp.opengl.util.texture.TextureData;
+import com.jogamp.opengl.util.texture.TextureIO;
 
 public abstract class AbstractVisualiser extends Frame implements GLEventListener {
 	private static final long	serialVersionUID	= 1864514209659235403L;
@@ -46,7 +52,11 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 	private GLU						glu;
 
 	private final GLCanvas			canvas;
+
 	private final FPSAnimator		animator;
+
+	private File					outputFile;
+	private boolean					saveNextFrame	= false;
 
 	public AbstractVisualiser(WorldController world, String title, int height, int width) {
 		this(world, title, height, width, setUpPainterFactory());
@@ -101,6 +111,10 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 		GL2 gl = drawable.getGL().getGL2(); // get the OpenGL graphics context
 		update();
 		render(gl);
+		if (saveNextFrame) {
+			save(gl, outputFile);
+			saveNextFrame = false;
+		}
 	}
 
 	@Override
@@ -188,6 +202,25 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 		GL2 gl = drawable.getGL().getGL2(); // get the OpenGL 2 graphics context
 
 		reshape(gl, height, width);
+	}
+
+	private void save(GL2 gl, File file) {
+		GLReadBufferUtil u = new GLReadBufferUtil(true, false);
+		u.readPixels(gl, false);
+		TextureData t = u.getTextureData();
+		try {
+			file.createNewFile();
+			TextureIO.write(t, file);
+		} catch (GLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	protected void saveFrame(File outputFile) {
+		this.outputFile = outputFile;
+		saveNextFrame = true;
 	}
 
 	protected abstract boolean update();
