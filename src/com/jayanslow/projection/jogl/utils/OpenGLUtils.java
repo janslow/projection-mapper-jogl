@@ -1,14 +1,27 @@
 package com.jayanslow.projection.jogl.utils;
 
+import java.awt.image.BufferedImage;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.vecmath.Color3f;
 import javax.vecmath.Color4f;
 import javax.vecmath.Vector3f;
 
+import com.jayanslow.projection.texture.models.ImageTexture;
 import com.jayanslow.projection.world.models.Rotation3f;
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 
 public class OpenGLUtils {
+
+	public static Texture createTexture(GL2 gl, BufferedImage image) {
+		return AWTTextureIO.newTexture(gl.getGLProfile(), image, false);
+	}
+
+	public static Texture createTexture(GL2 gl, ImageTexture texture) {
+		return createTexture(gl, texture.getBufferedImage());
+	}
 
 	public static void drawCuboid(GL2 gl, float x, float y, float z) {
 		gl.glBegin(GL2.GL_QUADS);
@@ -97,6 +110,16 @@ public class OpenGLUtils {
 		gl.glColor4f(color.x, color.y, color.z, color.w);
 	}
 
+	public static void setLighting(GL2 gl, boolean enable) {
+		if (enable) {
+			gl.glEnable(GL2.GL_LIGHTING);
+			gl.glEnable(GL2.GL_LIGHT0);
+		} else {
+			gl.glDisable(GL2.GL_LIGHTING);
+			gl.glDisable(GL2.GL_LIGHT0);
+		}
+	}
+
 	public static void setMaterial(GL2 gl, Color4f fillColor) {
 		setMaterial(gl, getRGBA(fillColor));
 	}
@@ -145,15 +168,5 @@ public class OpenGLUtils {
 
 	public static void translate(GL2 gl, Vector3f vector) {
 		gl.glTranslatef(vector.x, vector.y, vector.z);
-	}
-
-	public static void setLighting(GL2 gl, boolean enable) {
-		if (enable) {
-			gl.glEnable(GL2.GL_LIGHTING);
-			gl.glEnable(GL2.GL_LIGHT0);
-		} else {
-			gl.glDisable(GL2.GL_LIGHTING);
-			gl.glDisable(GL2.GL_LIGHT0);
-		}
 	}
 }

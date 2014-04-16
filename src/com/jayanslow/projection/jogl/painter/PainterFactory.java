@@ -3,6 +3,8 @@ package com.jayanslow.projection.jogl.painter;
 import javax.media.opengl.GL2;
 
 import com.jayanslow.projection.jogl.RenderMode;
+import com.jayanslow.projection.texture.models.ImageTexture;
+import com.jayanslow.projection.world.models.Face;
 
 public interface PainterFactory {
 	/**
@@ -22,6 +24,15 @@ public interface PainterFactory {
 	 * @return True if the type can be painted, otherwise false
 	 */
 	public <T> boolean containsPainter(Class<T> type);
+
+	/**
+	 * Gets the image texture to display on a face
+	 * 
+	 * @param face
+	 *            Face to lookup
+	 * @return ImageTexture to display, or null if there is no such image texture
+	 */
+	public ImageTexture getFaceTexture(Face face);
 
 	/**
 	 * Paints an object

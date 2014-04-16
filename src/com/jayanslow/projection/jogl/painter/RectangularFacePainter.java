@@ -5,7 +5,10 @@ import javax.vecmath.Color4f;
 import javax.vecmath.Vector2f;
 
 import com.jayanslow.projection.jogl.RenderMode.FaceMode;
+import com.jayanslow.projection.jogl.utils.OpenGLUtils;
+import com.jayanslow.projection.texture.models.ImageTexture;
 import com.jayanslow.projection.world.models.RectangularFace;
+import com.jogamp.opengl.util.texture.Texture;
 
 public class RectangularFacePainter extends AbstractFacePainter<RectangularFace> {
 	public static boolean register(PainterFactory f) {
@@ -24,9 +27,13 @@ public class RectangularFacePainter extends AbstractFacePainter<RectangularFace>
 		gl.glBegin(GL2.GL_QUADS);
 		gl.glNormal3f(0, 0, 1);
 		gl.glVertex3f(0, 0, 0);
+		gl.glTexCoord2i(0, 0);
 		gl.glVertex3f(dim.x, 0, 0);
+		gl.glTexCoord2i(1, 0);
 		gl.glVertex3f(dim.x, dim.y, 0);
+		gl.glTexCoord2i(1, 1);
 		gl.glVertex3f(0, dim.y, 0);
+		gl.glTexCoord2i(0, 1);
 		gl.glEnd();
 	}
 
@@ -42,8 +49,17 @@ public class RectangularFacePainter extends AbstractFacePainter<RectangularFace>
 			setUpShaded(gl);
 			break;
 		case TEXTURED:
-			// TODO: Textured
-			break;
+			setUpShaded(gl);
+			ImageTexture texture = getFactory().getFaceTexture(t);
+			Texture tex = OpenGLUtils.createTexture(gl, texture);
+
+			tex.enable(gl);
+			tex.bind(gl);
+
+			drawRectangle(gl, dim);
+
+			tex.disable(gl);
+			return;
 		case INVISIBLE:
 			return;
 		default:

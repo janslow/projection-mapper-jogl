@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 
 import javax.vecmath.Vector3f;
 
+import com.jayanslow.projection.texture.controllers.TextureController;
 import com.jayanslow.projection.world.controllers.WorldController;
 import com.jayanslow.projection.world.models.Rotation3f;
 
@@ -26,12 +27,13 @@ public class MasterVisualiser extends AbstractVisualiser {
 	private final StandaloneCamera	camera;
 	private RenderMode				renderMode;
 
-	public MasterVisualiser(WorldController world, int height, int width) {
-		this(world, height, width, RenderMode.OPAQUE_WIREFRAME);
+	public MasterVisualiser(WorldController world, TextureController textures, int height, int width) {
+		this(world, textures, height, width, RenderMode.OUTLINE);
 	}
 
-	public MasterVisualiser(WorldController world, int height, int width, RenderMode renderMode) {
-		super(world, "Universe", height, width);
+	public MasterVisualiser(WorldController world, TextureController textures, int height, int width,
+			RenderMode renderMode) {
+		super(world, textures, "Universe", height, width);
 
 		camera = setUpCamera(world.getUniverse().getDimensions(), height, width);
 		camera.addCameraListener(this);

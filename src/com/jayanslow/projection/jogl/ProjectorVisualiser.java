@@ -1,5 +1,6 @@
 package com.jayanslow.projection.jogl;
 
+import com.jayanslow.projection.texture.controllers.TextureController;
 import com.jayanslow.projection.world.controllers.WorldController;
 import com.jayanslow.projection.world.models.Projector;
 
@@ -12,9 +13,10 @@ public class ProjectorVisualiser extends AbstractVisualiser {
 	private final ProjectorCamera	camera;
 	private RenderMode				renderMode;
 
-	public ProjectorVisualiser(WorldController world, Projector projector, RenderMode renderMode) {
-		super(world, String.format("Projector #%s", projector.getProjectorId()), projector.getResolutionHeight(),
-				projector.getResolutionWidth());
+	public ProjectorVisualiser(WorldController world, TextureController textures, Projector projector,
+			RenderMode renderMode) {
+		super(world, textures, String.format("Projector #%s", projector.getProjectorId()), projector
+				.getResolutionHeight(), projector.getResolutionWidth());
 
 		camera = new ProjectorCamera(projector);
 		camera.addCameraListener(this);

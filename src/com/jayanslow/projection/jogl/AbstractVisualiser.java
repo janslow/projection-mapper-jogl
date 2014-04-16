@@ -26,6 +26,7 @@ import com.jayanslow.projection.jogl.painter.OriginPainter;
 import com.jayanslow.projection.jogl.painter.Painter;
 import com.jayanslow.projection.jogl.painter.PainterFactory;
 import com.jayanslow.projection.jogl.painter.UniversePainter;
+import com.jayanslow.projection.texture.controllers.TextureController;
 import com.jayanslow.projection.world.controllers.WorldController;
 import com.jayanslow.projection.world.models.Rotation3f;
 import com.jayanslow.projection.world.models.Universe;
@@ -37,8 +38,8 @@ import com.jogamp.opengl.util.texture.TextureIO;
 public abstract class AbstractVisualiser extends Frame implements GLEventListener, CameraListener {
 	private static final long	serialVersionUID	= 1864514209659235403L;
 
-	private static PainterFactory setUpPainterFactory() {
-		PainterFactory f = new MapPainterFactory(new HashMap<Class<?>, Painter<?>>());
+	private static PainterFactory setUpPainterFactory(TextureController textures) {
+		PainterFactory f = new MapPainterFactory(new HashMap<Class<?>, Painter<?>>(), textures);
 
 		UniversePainter.registerNested(f);
 		OriginPainter.registerNested(f);
@@ -60,10 +61,6 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 	private File					outputFile;
 	private boolean					saveNextFrame	= false;
 
-	public AbstractVisualiser(WorldController world, String title, int height, int width) {
-		this(world, title, height, width, setUpPainterFactory());
-	}
-
 	public AbstractVisualiser(WorldController world, String title, int height, int width, PainterFactory f) {
 		super(title);
 		this.world = world;
@@ -82,6 +79,10 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 		animator.setUpdateFPSFrames(3, null);
 
 		pack();
+	}
+
+	public AbstractVisualiser(WorldController world, TextureController textures, String title, int height, int width) {
+		this(world, title, height, width, setUpPainterFactory(textures));
 	}
 
 	@Override

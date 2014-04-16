@@ -5,13 +5,22 @@ import java.util.Map;
 import javax.media.opengl.GL2;
 
 import com.jayanslow.projection.jogl.RenderMode;
+import com.jayanslow.projection.texture.controllers.TextureController;
+import com.jayanslow.projection.texture.models.ImageTexture;
+import com.jayanslow.projection.world.models.Face;
 
 public class MapPainterFactory implements PainterFactory {
 
 	private final Map<Class<?>, Painter<?>>	map;
+	private final TextureController			textures;
 
 	public MapPainterFactory(Map<Class<?>, Painter<?>> map) {
+		this(map, null);
+	}
+
+	public MapPainterFactory(Map<Class<?>, Painter<?>> map, TextureController textures) {
 		this.map = map;
+		this.textures = textures;
 	}
 
 	@Override
@@ -26,6 +35,13 @@ public class MapPainterFactory implements PainterFactory {
 	@Override
 	public <T> boolean containsPainter(Class<T> type) {
 		return map.containsKey(type);
+	}
+
+	@Override
+	public ImageTexture getFaceTexture(Face face) {
+		if (textures == null)
+			return null;
+		return textures.getCurrentImageTexture(face);
 	}
 
 	@SuppressWarnings("unchecked")
