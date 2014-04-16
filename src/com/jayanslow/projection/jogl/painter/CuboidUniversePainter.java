@@ -48,7 +48,7 @@ public class CuboidUniversePainter extends AbstractSimplePainter<CuboidUniverse>
 	protected void paintObject(GL2 gl, CuboidUniverse t, RenderMode renderMode) {
 		Vector3f dim = t.getDimensions();
 
-		OpenGLUtils.drawRectangle(gl, dim.x, dim.y, dim.z);
+		OpenGLUtils.drawCuboid(gl, dim.x, dim.y, dim.z);
 	}
 
 	@Override

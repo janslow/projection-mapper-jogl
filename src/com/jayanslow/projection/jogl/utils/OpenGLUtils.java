@@ -10,7 +10,7 @@ import com.jayanslow.projection.world.models.Rotation3f;
 
 public class OpenGLUtils {
 
-	public static void drawRectangle(GL2 gl, float x, float y, float z) {
+	public static void drawCuboid(GL2 gl, float x, float y, float z) {
 		gl.glBegin(GL2.GL_QUADS);
 
 		// Front

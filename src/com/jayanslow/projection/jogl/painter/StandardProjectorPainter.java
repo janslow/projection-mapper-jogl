@@ -33,7 +33,7 @@ public class StandardProjectorPainter extends AbstractRealObjectPainter<Standard
 		gl.glPushMatrix();
 		Vector3f dim = t.getDimensions();
 		gl.glTranslatef(-dim.x / 2, -dim.y / 2, -dim.z);
-		OpenGLUtils.drawRectangle(gl, dim.x, dim.y, dim.z);
+		OpenGLUtils.drawCuboid(gl, dim.x, dim.y, dim.z);
 		gl.glPopMatrix();
 
 		// Draw Beam Direction
