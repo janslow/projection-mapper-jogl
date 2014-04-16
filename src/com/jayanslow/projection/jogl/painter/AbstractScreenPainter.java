@@ -18,7 +18,4 @@ public abstract class AbstractScreenPainter<T extends Screen> extends AbstractRe
 		for (Face f : t.getFaces())
 			getFactory().paint(gl, Face.class, f, renderMode);
 	}
-
-	@Override
-	protected void paintObject(GL2 gl, T t, RenderMode renderMode) {}
 }

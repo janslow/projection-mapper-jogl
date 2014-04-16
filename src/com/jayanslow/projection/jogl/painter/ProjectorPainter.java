@@ -22,6 +22,8 @@ public class ProjectorPainter extends AbstractPainter<Projector> {
 
 	@Override
 	public void paint(GL2 gl, Projector t, RenderMode renderType) {
+		if (!renderType.getIsProjectorVisible())
+			return;
 		getFactory().paint(gl, StandardProjector.class, (StandardProjector) t, renderType);
 	}
 }

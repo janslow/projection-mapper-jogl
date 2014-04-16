@@ -14,18 +14,12 @@ public abstract class AbstractFacePainter<T extends Face> extends AbstractSimple
 	}
 
 	@Override
-	protected void paintChildren(GL2 gl, T t, RenderMode renderMode) {}
-
-	protected abstract void paintFace(GL2 gl, T t, RenderMode renderMode);
-
-	@Override
-	protected void paintObject(GL2 gl, T t, RenderMode renderMode) {
+	public void paint(GL2 gl, T t, RenderMode renderMode) {
 		gl.glPushMatrix();
 		OpenGLUtils.translate(gl, t.getPosition());
 		OpenGLUtils.rotate(gl, t.getRotation());
 
-		paintFace(gl, t, renderMode);
+		super.paint(gl, t, renderMode);
 		gl.glPopMatrix();
 	}
-
 }

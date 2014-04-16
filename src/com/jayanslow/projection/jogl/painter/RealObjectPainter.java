@@ -27,7 +27,8 @@ public class RealObjectPainter extends AbstractPainter<RealObject> {
 	public void paint(GL2 gl, RealObject t, RenderMode renderType) {
 		switch (t.getType()) {
 		case PROJECTOR:
-			getFactory().paint(gl, Projector.class, (Projector) t, renderType);
+			if (renderType.getIsProjectorVisible())
+				getFactory().paint(gl, Projector.class, (Projector) t, renderType);
 			break;
 		case SCREEN:
 			getFactory().paint(gl, Screen.class, (Screen) t, renderType);

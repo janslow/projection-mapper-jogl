@@ -25,15 +25,7 @@ public class CuboidUniversePainter extends AbstractSimplePainter<CuboidUniverse>
 
 	@Override
 	public void paint(GL2 gl, CuboidUniverse t, RenderMode renderMode) {
-		float SHINE_ALL_DIRECTIONS = 1;
-		float[] lightPos = { 0, 0, 0, SHINE_ALL_DIRECTIONS };
-		float[] lightColorAmbient = { 0.2f, 0.2f, 0.2f, 1f };
-		float[] lightColorSpecular = { 0.8f, 0.8f, 0.8f, 1f };
-
-		// Set light parameters.
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, lightPos, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, lightColorAmbient, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, lightColorSpecular, 0);
+		setUpLighting(gl);
 
 		super.paint(gl, t, renderMode);
 	}
@@ -45,21 +37,24 @@ public class CuboidUniversePainter extends AbstractSimplePainter<CuboidUniverse>
 	}
 
 	@Override
-	protected void paintObject(GL2 gl, CuboidUniverse t, RenderMode renderMode) {
+	protected void paintUniverse(GL2 gl, CuboidUniverse t) {
+		setUpStroke(gl);
+
 		Vector3f dim = t.getDimensions();
 
 		OpenGLUtils.drawCuboid(gl, dim.x, dim.y, dim.z);
 	}
 
-	@Override
-	protected void renderOpaqueWireframe(GL2 gl, CuboidUniverse t, RenderMode renderMode, Color4f strokeColor) {
-		setWireframe(gl, t, renderMode, strokeColor);
-		paintObject(gl, t, renderMode);
-	}
+	private void setUpLighting(GL2 gl) {
+		float SHINE_ALL_DIRECTIONS = 1;
+		float[] lightPos = { 0, 0, 0, SHINE_ALL_DIRECTIONS };
+		float[] lightColorAmbient = { 0.2f, 0.2f, 0.2f, 1f };
+		float[] lightColorSpecular = { 0.8f, 0.8f, 0.8f, 1f };
 
-	@Override
-	protected void setSolid(GL2 gl, CuboidUniverse t, RenderMode renderMode, Color4f fillColor) {
-		setWireframe(gl, t, renderMode, getStrokeColor());
+		// Set light parameters.
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, lightPos, 0);
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, lightColorAmbient, 0);
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, lightColorSpecular, 0);
 	}
 
 }

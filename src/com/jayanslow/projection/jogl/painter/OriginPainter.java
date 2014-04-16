@@ -1,13 +1,13 @@
 package com.jayanslow.projection.jogl.painter;
 
 import javax.media.opengl.GL2;
+import javax.vecmath.Color4f;
 
 import com.jayanslow.projection.jogl.Origin;
-import com.jayanslow.projection.jogl.RenderMode;
 import com.jayanslow.projection.jogl.utils.OpenGLUtils;
 import com.jogamp.opengl.util.gl2.GLUT;
 
-public class OriginPainter extends AbstractPainter<Origin> {
+public class OriginPainter extends AbstractSimplePainter<Origin> {
 	public static boolean register(PainterFactory f) {
 		return f.addPainter(new OriginPainter(f));
 	}
@@ -17,18 +17,17 @@ public class OriginPainter extends AbstractPainter<Origin> {
 	}
 
 	public OriginPainter(PainterFactory factory) {
-		super(Origin.class, factory);
+		super(Origin.class, factory, new Color4f(), new Color4f());
 	}
 
 	@Override
-	public void paint(GL2 gl, Origin t, RenderMode type) {
-		OpenGLUtils.setLighting(gl, false);
+	public void paintOrigin(GL2 gl, Origin t) {
+		setUpFill(gl);
 
 		float x = t.getSizeX(), y = t.getSizeY(), z = t.getSizeZ();
 		float arrowSize = x / 5;
 
 		GLUT glut = new GLUT();
-		OpenGLUtils.setPolygonMode(gl, true);
 
 		// Draw x-axis
 		OpenGLUtils.setColor(gl, t.getColorX());

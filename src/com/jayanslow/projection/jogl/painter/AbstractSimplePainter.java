@@ -27,38 +27,46 @@ public abstract class AbstractSimplePainter<T> extends AbstractPainter<T> {
 
 	@Override
 	public void paint(GL2 gl, T t, RenderMode renderMode) {
-		switch (renderMode) {
-		case OPAQUE_WIREFRAME:
-			renderOpaqueWireframe(gl, t, renderMode, getStrokeColor());
-			break;
-		case WIREFRAME:
-			setWireframe(gl, t, renderMode, getStrokeColor());
-			paintObject(gl, t, renderMode);
-			break;
-		case SOLID:
-			setSolid(gl, t, renderMode, getFillColor());
-			paintObject(gl, t, renderMode);
-			break;
-		default:
-			throw new UnsupportedOperationException("Unhandled DisplayType " + renderMode.toString());
-		}
+		if (renderMode.getIsFaceVisible())
+			paintFace(gl, t, renderMode.getFaceMode());
+		if (renderMode.getIsOriginVisible())
+			paintOrigin(gl, t);
+		if (renderMode.getIsProjectorVisible())
+			paintProjector(gl, t);
+		if (renderMode.getIsStrokeVisible())
+			paintStroke(gl, t);
+		if (renderMode.getIsUniverseVisible())
+			paintUniverse(gl, t);
 		paintChildren(gl, t, renderMode);
 	}
 
-	protected abstract void paintChildren(GL2 gl, T t, RenderMode renderMode);
+	protected void paintChildren(GL2 gl, T t, RenderMode renderMode) {}
 
-	protected abstract void paintObject(GL2 gl, T t, RenderMode renderMode);
+	protected void paintFace(GL2 gl, T t, RenderMode.FaceMode faceMode) {}
 
-	protected void renderOpaqueWireframe(GL2 gl, T t, RenderMode renderMode, Color4f strokeColor) {
-		OpenGLUtils.setLighting(gl, false);
-		OpenGLUtils.setPolygonMode(gl, true);
-		OpenGLUtils.setColor(gl, new Color4f(0, 0, 0, 1));
-		paintObject(gl, t, renderMode);
-		setWireframe(gl, t, renderMode, strokeColor);
-		paintObject(gl, t, renderMode);
+	protected void paintOrigin(GL2 gl, T t) {}
+
+	protected void paintProjector(GL2 gl, T t) {}
+
+	protected void paintStroke(GL2 gl, T t) {}
+
+	protected void paintUniverse(GL2 gl, T t) {}
+
+	protected void setUpFill(GL2 gl) {
+		setUpFill(gl, getFillColor());
 	}
 
-	protected void setSolid(GL2 gl, T t, RenderMode renderMode, Color4f fillColor) {
+	protected void setUpFill(GL2 gl, Color4f fillColor) {
+		OpenGLUtils.setLighting(gl, false);
+		OpenGLUtils.setPolygonMode(gl, true);
+		OpenGLUtils.setColor(gl, fillColor);
+	}
+
+	protected void setUpShaded(GL2 gl) {
+		setUpShaded(gl, getFillColor());
+	}
+
+	protected void setUpShaded(GL2 gl, Color4f fillColor) {
 		OpenGLUtils.setLighting(gl, true);
 		OpenGLUtils.setPolygonMode(gl, true);
 
@@ -66,7 +74,11 @@ public abstract class AbstractSimplePainter<T> extends AbstractPainter<T> {
 		OpenGLUtils.setColor(gl, fillColor);
 	}
 
-	protected void setWireframe(GL2 gl, T t, RenderMode renderMode, Color4f strokeColor) {
+	protected void setUpStroke(GL2 gl) {
+		setUpStroke(gl, getStrokeColor());
+	}
+
+	protected void setUpStroke(GL2 gl, Color4f strokeColor) {
 		OpenGLUtils.setLighting(gl, false);
 		OpenGLUtils.setPolygonMode(gl, false);
 		OpenGLUtils.setColor(gl, strokeColor);

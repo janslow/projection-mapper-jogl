@@ -56,11 +56,13 @@ public class MasterVisualiser extends AbstractVisualiser {
 					MasterVisualiser.this.setRenderMode(RenderMode.WIREFRAME);
 					break;
 				case KeyEvent.VK_2:
-					MasterVisualiser.this.setRenderMode(RenderMode.OPAQUE_WIREFRAME);
+					MasterVisualiser.this.setRenderMode(RenderMode.OUTLINE);
 					break;
 				case KeyEvent.VK_3:
 					MasterVisualiser.this.setRenderMode(RenderMode.SOLID);
 					break;
+				case KeyEvent.VK_4:
+					MasterVisualiser.this.setRenderMode(RenderMode.TEXTURED);
 				}
 			}
 		};

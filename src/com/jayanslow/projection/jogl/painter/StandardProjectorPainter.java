@@ -26,10 +26,12 @@ public class StandardProjectorPainter extends AbstractRealObjectPainter<Standard
 	protected void paintChildren(GL2 gl, StandardProjector t, RenderMode renderMode) {}
 
 	@Override
-	protected void paintObject(GL2 gl, StandardProjector t, RenderMode renderMode) {
+	protected void paintProjector(GL2 gl, StandardProjector t) {
+
 		GLUT glut = new GLUT();
 
 		// Draw Projector Cuboid
+		setUpShaded(gl);
 		gl.glPushMatrix();
 		Vector3f dim = t.getDimensions();
 		gl.glTranslatef(-dim.x / 2, -dim.y / 2, -dim.z);
@@ -45,7 +47,6 @@ public class StandardProjectorPainter extends AbstractRealObjectPainter<Standard
 		gl.glVertex3f(0, 0, length);
 		gl.glEnd();
 
-		OpenGLUtils.setPolygonMode(gl, true);
 		gl.glTranslatef(0, 0, length);
 		glut.glutSolidCone(length / 12, length / 4, 10, 10);
 		gl.glPopMatrix();
