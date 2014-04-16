@@ -134,7 +134,7 @@ public class StandaloneCamera extends AbstractCamera {
 
 		Rotation3f old = new Rotation3f(rotation);
 
-		rotation.set(rotation);
+		this.rotation.set(rotation);
 
 		fireCameraRotate(old);
 	}
