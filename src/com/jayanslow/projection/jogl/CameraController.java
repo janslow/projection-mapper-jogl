@@ -26,9 +26,23 @@ public class CameraController implements KeyListener, MouseWheelListener, MouseM
 
 	private final float				speedScale;
 
+	private boolean					isAltOrMetaPressed;
+
 	public CameraController(StandaloneCamera camera, float speedScale) {
 		this.camera = camera;
 		this.speedScale = speedScale;
+	}
+
+	public boolean isChanging() {
+		return isMoving() || isRotating();
+	}
+
+	public boolean isMoving() {
+		return isLeftPressed || isRightPressed || isUpPressed || isDownPressed || isSpacePressed || isShiftPressed;
+	}
+
+	private boolean isRotating() {
+		return isAltOrMetaPressed;
 	}
 
 	@Override
@@ -125,6 +139,7 @@ public class CameraController implements KeyListener, MouseWheelListener, MouseM
 			break;
 		case KeyEvent.VK_META:
 		case KeyEvent.VK_ALT:
+			isAltOrMetaPressed = pressed;
 			if (!pressed)
 				isLeftPressed = isRightPressed = isUpPressed = isDownPressed = isSpacePressed = isShiftPressed = false;
 			break;
