@@ -59,9 +59,9 @@ public class Application {
 			}
 		});
 
-		// final ProjectorVisualiser p1 = new ProjectorVisualiser(world, textures, world.getProjector(0),
-		// RenderMode.SOLID);
-		// p1.setVisible(true);
+		final ProjectorVisualiser p1 = new ProjectorVisualiser(world, textures, world.getProjector(0),
+				RenderMode.TEXTURED);
+		p1.setVisible(true);
 
 		final EditorController c = new StandardEditorController(world);
 		c.editUniverse();

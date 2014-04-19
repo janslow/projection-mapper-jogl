@@ -50,6 +50,7 @@ public class MasterVisualiser extends AbstractVisualiser {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				setRenderMode(e.getKeyCode());
+				markDirty();
 			}
 
 			public void setRenderMode(int keyCode) {
@@ -81,7 +82,16 @@ public class MasterVisualiser extends AbstractVisualiser {
 		return renderMode;
 	}
 
-	public void setRenderMode(RenderMode renderMode) {
+	@Override
+	protected synchronized void markClean() {
+		if (!cameraController.isChanging())
+			super.markClean();
+	}
+
+	public void setRenderMode(RenderMode renderMode) throws NullPointerException {
+		if (renderMode == null)
+			throw new NullPointerException();
+		markDirty();
 		this.renderMode = renderMode;
 	}
 
@@ -89,4 +99,5 @@ public class MasterVisualiser extends AbstractVisualiser {
 	protected boolean update() {
 		return cameraController.step();
 	}
+
 }

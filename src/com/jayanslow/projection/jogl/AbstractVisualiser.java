@@ -28,6 +28,7 @@ import com.jayanslow.projection.jogl.painter.PainterFactory;
 import com.jayanslow.projection.jogl.painter.UniversePainter;
 import com.jayanslow.projection.texture.controllers.TextureController;
 import com.jayanslow.projection.world.controllers.WorldController;
+import com.jayanslow.projection.world.listeners.WorldListener;
 import com.jayanslow.projection.world.models.Rotation3f;
 import com.jayanslow.projection.world.models.Universe;
 import com.jogamp.opengl.util.FPSAnimator;
@@ -35,7 +36,7 @@ import com.jogamp.opengl.util.GLReadBufferUtil;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
-public abstract class AbstractVisualiser extends Frame implements GLEventListener, CameraListener {
+public abstract class AbstractVisualiser extends Frame implements GLEventListener, CameraListener, WorldListener {
 	private static final long	serialVersionUID	= 1864514209659235403L;
 
 	private static PainterFactory setUpPainterFactory(TextureController textures) {
@@ -56,15 +57,19 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 	private final GLJPanel			canvas;
 
 	private final FPSAnimator		animator;
-	private boolean					markDirty		= false;
 
+	private boolean					markDirty		= false;
 	private File					outputFile;
+
 	private boolean					saveNextFrame	= false;
+	private volatile boolean		isDirty;
 
 	public AbstractVisualiser(WorldController world, String title, int height, int width, PainterFactory f) {
 		super(title);
 		this.world = world;
 		this.f = f;
+
+		world.addWorldListener(this);
 
 		final GLProfile glp = GLProfile.getDefault();
 		final GLCapabilities caps = new GLCapabilities(glp);
@@ -144,6 +149,7 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 			save(gl, outputFile);
 			saveNextFrame = false;
 		}
+		markClean();
 	}
 
 	@Override
@@ -179,6 +185,20 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 		gl.glDepthFunc(GL.GL_LEQUAL); // the type of depth test to do
 		gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST); // best perspective correction
 		gl.glShadeModel(GL2.GL_SMOOTH); // blends colors nicely, and smoothes out lighting
+	}
+
+	protected boolean isDirty() {
+		return isDirty;
+	}
+
+	protected synchronized void markClean() {
+		isDirty = false;
+		animator.pause();
+	}
+
+	protected synchronized void markDirty() {
+		isDirty = true;
+		animator.resume();
 	}
 
 	private void render(GL2 gl) {
@@ -253,4 +273,9 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 	}
 
 	protected abstract boolean update();
+
+	@Override
+	public void worldChanged() {
+		markDirty();
+	}
 }
