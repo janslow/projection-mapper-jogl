@@ -21,12 +21,15 @@ import javax.media.opengl.awt.GLJPanel;
 import javax.media.opengl.glu.GLU;
 import javax.vecmath.Vector3f;
 
+import com.jayanslow.projection.jogl.RenderMode.FaceMode;
 import com.jayanslow.projection.jogl.painter.MapPainterFactory;
 import com.jayanslow.projection.jogl.painter.OriginPainter;
 import com.jayanslow.projection.jogl.painter.Painter;
 import com.jayanslow.projection.jogl.painter.PainterFactory;
 import com.jayanslow.projection.jogl.painter.UniversePainter;
 import com.jayanslow.projection.texture.controllers.TextureController;
+import com.jayanslow.projection.texture.listeners.TextureListener;
+import com.jayanslow.projection.texture.models.Texture;
 import com.jayanslow.projection.world.controllers.WorldController;
 import com.jayanslow.projection.world.listeners.WorldListener;
 import com.jayanslow.projection.world.models.Rotation3f;
@@ -36,7 +39,8 @@ import com.jogamp.opengl.util.GLReadBufferUtil;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
-public abstract class AbstractVisualiser extends Frame implements GLEventListener, CameraListener, WorldListener {
+public abstract class AbstractVisualiser extends Frame implements GLEventListener, CameraListener, WorldListener,
+		TextureListener {
 	private static final long	serialVersionUID	= 1864514209659235403L;
 
 	private static PainterFactory setUpPainterFactory(TextureController textures) {
@@ -88,6 +92,7 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 
 	public AbstractVisualiser(WorldController world, TextureController textures, String title, int height, int width) {
 		this(world, title, height, width, setUpPainterFactory(textures));
+		textures.addTextureListener(this);
 	}
 
 	@Override
@@ -270,6 +275,18 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 	protected void saveFrame(File outputFile) {
 		this.outputFile = outputFile;
 		saveNextFrame = true;
+	}
+
+	@Override
+	public void textureChange(Texture texture) {
+		if (getRenderMode().getFaceMode().equals(FaceMode.TEXTURED))
+			markDirty();
+	}
+
+	@Override
+	public void textureFrameChange(int current, int old) {
+		if (getRenderMode().getFaceMode().equals(FaceMode.TEXTURED))
+			markDirty();
 	}
 
 	protected abstract boolean update();
