@@ -51,14 +51,19 @@ public class RectangularFacePainter extends AbstractFacePainter<RectangularFace>
 		case TEXTURED:
 			setUpShaded(gl);
 			ImageTexture texture = getFactory().getFaceTexture(t);
-			Texture tex = OpenGLUtils.createTexture(gl, texture);
 
-			tex.enable(gl);
-			tex.bind(gl);
+			if (texture == null)
+				paintFace(gl, t, FaceMode.BLACK);
+			else {
+				Texture tex = OpenGLUtils.createTexture(gl, texture);
 
-			drawRectangle(gl, dim);
+				tex.enable(gl);
+				tex.bind(gl);
 
-			tex.disable(gl);
+				drawRectangle(gl, dim);
+
+				tex.disable(gl);
+			}
 			return;
 		case INVISIBLE:
 			return;
