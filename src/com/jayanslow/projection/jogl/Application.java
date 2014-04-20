@@ -19,8 +19,8 @@ import com.jayanslow.projection.texture.models.BufferedImageTexture;
 import com.jayanslow.projection.texture.models.Texture;
 import com.jayanslow.projection.world.controllers.HashMapWorldController;
 import com.jayanslow.projection.world.controllers.WorldController;
-import com.jayanslow.projection.world.editor.controller.EditorController;
-import com.jayanslow.projection.world.editor.controller.StandardEditorController;
+import com.jayanslow.projection.world.editor.controller.WorldEditorController;
+import com.jayanslow.projection.world.editor.controller.StandardWorldEditorController;
 import com.jayanslow.projection.world.models.CuboidScreen;
 import com.jayanslow.projection.world.models.CuboidUniverse;
 import com.jayanslow.projection.world.models.Face;
@@ -63,7 +63,7 @@ public class Application {
 				RenderMode.TEXTURED);
 		p1.setVisible(true);
 
-		final EditorController c = new StandardEditorController(world);
+		final WorldEditorController c = new StandardWorldEditorController(world);
 		c.editUniverse();
 	}
 
