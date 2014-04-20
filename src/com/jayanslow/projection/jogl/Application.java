@@ -1,10 +1,8 @@
 package com.jayanslow.projection.jogl;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,12 +13,14 @@ import javax.vecmath.Vector3f;
 
 import com.jayanslow.projection.texture.controllers.MapTextureController;
 import com.jayanslow.projection.texture.controllers.TextureController;
-import com.jayanslow.projection.texture.models.BufferedImageTexture;
+import com.jayanslow.projection.texture.editor.controller.StandardTextureEditorController;
+import com.jayanslow.projection.texture.editor.controller.TextureEditorController;
+import com.jayanslow.projection.texture.models.ColorImageTexture;
 import com.jayanslow.projection.texture.models.Texture;
 import com.jayanslow.projection.world.controllers.HashMapWorldController;
 import com.jayanslow.projection.world.controllers.WorldController;
-import com.jayanslow.projection.world.editor.controller.WorldEditorController;
 import com.jayanslow.projection.world.editor.controller.StandardWorldEditorController;
+import com.jayanslow.projection.world.editor.controller.WorldEditorController;
 import com.jayanslow.projection.world.models.CuboidScreen;
 import com.jayanslow.projection.world.models.CuboidUniverse;
 import com.jayanslow.projection.world.models.Face;
@@ -33,17 +33,6 @@ import com.jayanslow.projection.world.models.StandardProjector;
 import com.jayanslow.projection.world.models.Universe;
 
 public class Application {
-
-	private static BufferedImageTexture createImage(Color color, Vector2f dimensions) {
-		int x = 1000, y = (int) (x / dimensions.x * dimensions.y);
-		BufferedImage image = new BufferedImage(x, y, BufferedImage.TYPE_3BYTE_BGR);
-
-		Graphics2D g = image.createGraphics();
-		g.setPaint(color);
-		g.fillRect(0, 0, x, y);
-
-		return new BufferedImageTexture(image);
-	}
 
 	public static void main(String[] args) {
 		WorldController world = makeSampleWorld();
@@ -63,8 +52,11 @@ public class Application {
 				RenderMode.TEXTURED);
 		p1.setVisible(true);
 
-		final WorldEditorController c = new StandardWorldEditorController(world);
-		c.editUniverse();
+		final WorldEditorController worldEditor = new StandardWorldEditorController(world);
+		worldEditor.editUniverse();
+
+		final TextureEditorController textureEditor = new StandardTextureEditorController(textures);
+		textureEditor.editMappings();
 	}
 
 	public static TextureController makeSampleTextures(WorldController world) {
@@ -74,7 +66,7 @@ public class Application {
 		for (Screen s : world.getScreens())
 			for (Face f : s.getFaces()) {
 				Color c = Color.getHSBColor(r.nextFloat(), 0.55f, 0.76f);
-				textures.putTexture(f, createImage(c, ((RectangularFace) f).getDimensions()));
+				textures.putTexture(f, new ColorImageTexture(c, ((RectangularFace) f).getDimensions()));
 			}
 		return textures;
 	}
