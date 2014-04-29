@@ -27,13 +27,13 @@ public class RectangularFacePainter extends AbstractFacePainter<RectangularFace>
 		gl.glBegin(GL2.GL_QUADS);
 		gl.glNormal3f(0, 0, 1);
 		gl.glVertex3f(0, 0, 0);
-		gl.glTexCoord2i(0, 0);
-		gl.glVertex3f(dim.x, 0, 0);
-		gl.glTexCoord2i(1, 0);
-		gl.glVertex3f(dim.x, dim.y, 0);
-		gl.glTexCoord2i(1, 1);
-		gl.glVertex3f(0, dim.y, 0);
 		gl.glTexCoord2i(0, 1);
+		gl.glVertex3f(dim.x, 0, 0);
+		gl.glTexCoord2i(0, 0);
+		gl.glVertex3f(dim.x, dim.y, 0);
+		gl.glTexCoord2i(1, 0);
+		gl.glVertex3f(0, dim.y, 0);
+		gl.glTexCoord2i(1, 1);
 		gl.glEnd();
 	}
 
@@ -49,7 +49,7 @@ public class RectangularFacePainter extends AbstractFacePainter<RectangularFace>
 			setUpShaded(gl);
 			break;
 		case TEXTURED:
-			setUpShaded(gl);
+			setUpFill(gl);
 			ImageTexture texture = getFactory().getFaceTexture(t);
 
 			if (texture == null)
