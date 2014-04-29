@@ -79,6 +79,8 @@ public class MasterVisualiser extends AbstractVisualiser {
 
 	@Override
 	public RenderMode getRenderMode() {
+		if (cameraController.isChanging())
+			return RenderMode.OUTLINE;
 		return renderMode;
 	}
 
