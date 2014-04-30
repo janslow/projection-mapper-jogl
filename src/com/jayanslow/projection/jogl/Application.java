@@ -16,7 +16,7 @@ public class Application {
 		WorldController world = SampleWorld.makeSampleWorld();
 		TextureController textures = SampleWorld.makeSampleTextures(world);
 
-		final MasterVisualiser v = new MasterVisualiser(world, textures, 500, 500);
+		final MasterJoglVisualiser v = new MasterJoglVisualiser(world, textures, 500, 500);
 		v.setVisible(true);
 
 		v.addWindowListener(new WindowAdapter() {
@@ -26,7 +26,7 @@ public class Application {
 			}
 		});
 
-		final ProjectorVisualiser p = new ProjectorVisualiser(world, textures, world.getProjector(0),
+		final ProjectorJoglVisualiser p = new ProjectorJoglVisualiser(world, textures, world.getProjector(0),
 				RenderMode.TEXTURED);
 		p.setVisible(true);
 

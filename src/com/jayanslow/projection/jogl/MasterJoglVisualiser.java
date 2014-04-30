@@ -9,7 +9,7 @@ import com.jayanslow.projection.texture.controllers.TextureController;
 import com.jayanslow.projection.world.controllers.WorldController;
 import com.jayanslow.projection.world.models.Rotation3f;
 
-public class MasterVisualiser extends AbstractVisualiser {
+public class MasterJoglVisualiser extends AbstractJoglVisualiser {
 	private static final long	serialVersionUID	= -97103914923218634L;
 
 	private static StandaloneCamera setUpCamera(Vector3f dimensions, int resolutionHeight, int resolutionWidth) {
@@ -27,11 +27,11 @@ public class MasterVisualiser extends AbstractVisualiser {
 	private final StandaloneCamera	camera;
 	private RenderMode				renderMode;
 
-	public MasterVisualiser(WorldController world, TextureController textures, int height, int width) {
+	public MasterJoglVisualiser(WorldController world, TextureController textures, int height, int width) {
 		this(world, textures, height, width, RenderMode.OUTLINE);
 	}
 
-	public MasterVisualiser(WorldController world, TextureController textures, int height, int width,
+	public MasterJoglVisualiser(WorldController world, TextureController textures, int height, int width,
 			RenderMode renderMode) {
 		super(world, textures, "Universe", height, width);
 
@@ -56,16 +56,16 @@ public class MasterVisualiser extends AbstractVisualiser {
 			public void setRenderMode(int keyCode) {
 				switch (keyCode) {
 				case KeyEvent.VK_1:
-					MasterVisualiser.this.setRenderMode(RenderMode.WIREFRAME);
+					MasterJoglVisualiser.this.setRenderMode(RenderMode.WIREFRAME);
 					break;
 				case KeyEvent.VK_2:
-					MasterVisualiser.this.setRenderMode(RenderMode.OUTLINE);
+					MasterJoglVisualiser.this.setRenderMode(RenderMode.OUTLINE);
 					break;
 				case KeyEvent.VK_3:
-					MasterVisualiser.this.setRenderMode(RenderMode.SOLID);
+					MasterJoglVisualiser.this.setRenderMode(RenderMode.SOLID);
 					break;
 				case KeyEvent.VK_4:
-					MasterVisualiser.this.setRenderMode(RenderMode.TEXTURED);
+					MasterJoglVisualiser.this.setRenderMode(RenderMode.TEXTURED);
 				}
 			}
 		};

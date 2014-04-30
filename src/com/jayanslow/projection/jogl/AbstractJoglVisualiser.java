@@ -1,14 +1,12 @@
 package com.jayanslow.projection.jogl;
 
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -21,59 +19,24 @@ import javax.media.opengl.awt.GLJPanel;
 import javax.media.opengl.glu.GLU;
 import javax.vecmath.Vector3f;
 
-import com.jayanslow.projection.jogl.RenderMode.FaceMode;
-import com.jayanslow.projection.jogl.painter.MapPainterFactory;
-import com.jayanslow.projection.jogl.painter.OriginPainter;
-import com.jayanslow.projection.jogl.painter.Painter;
 import com.jayanslow.projection.jogl.painter.PainterFactory;
-import com.jayanslow.projection.jogl.painter.UniversePainter;
 import com.jayanslow.projection.texture.controllers.TextureController;
-import com.jayanslow.projection.texture.listeners.TextureListener;
-import com.jayanslow.projection.texture.models.Texture;
 import com.jayanslow.projection.world.controllers.WorldController;
-import com.jayanslow.projection.world.listeners.WorldListener;
-import com.jayanslow.projection.world.models.Rotation3f;
 import com.jayanslow.projection.world.models.Universe;
 import com.jogamp.opengl.util.FPSAnimator;
 import com.jogamp.opengl.util.GLReadBufferUtil;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
-public abstract class AbstractVisualiser extends Frame implements GLEventListener, CameraListener, WorldListener,
-		TextureListener {
+public abstract class AbstractJoglVisualiser extends VisualiserFrame implements GLEventListener {
 	private static final long	serialVersionUID	= 1864514209659235403L;
 
-	private static PainterFactory setUpPainterFactory(TextureController textures) {
-		PainterFactory f = new MapPainterFactory(new HashMap<Class<?>, Painter<?>>(), textures);
+	private GLU					glu;
+	private final GLJPanel		canvas;
+	private final FPSAnimator	animator;
 
-		UniversePainter.registerNested(f);
-		OriginPainter.registerNested(f);
-
-		return f;
-	}
-
-	private final WorldController	world;
-
-	private final PainterFactory	f;
-
-	private GLU						glu;
-
-	private final GLJPanel			canvas;
-
-	private final FPSAnimator		animator;
-
-	private boolean					markDirty		= false;
-	private File					outputFile;
-
-	private boolean					saveNextFrame	= false;
-	private volatile boolean		isDirty;
-
-	public AbstractVisualiser(WorldController world, String title, int height, int width, PainterFactory f) {
-		super(title);
-		this.world = world;
-		this.f = f;
-
-		world.addWorldListener(this);
+	public AbstractJoglVisualiser(WorldController world, String title, int height, int width, PainterFactory f) {
+		super(world, f, title);
 
 		final GLProfile glp = GLProfile.getDefault();
 		final GLCapabilities caps = new GLCapabilities(glp);
@@ -90,8 +53,8 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 		pack();
 	}
 
-	public AbstractVisualiser(WorldController world, TextureController textures, String title, int height, int width) {
-		this(world, title, height, width, setUpPainterFactory(textures));
+	public AbstractJoglVisualiser(WorldController world, TextureController textures, String title, int height, int width) {
+		this(world, title, height, width, VisualiserFrame.setUpPainterFactory(textures));
 		textures.addTextureListener(this);
 	}
 
@@ -120,13 +83,8 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 	}
 
 	@Override
-	public void cameraChangeFieldOfView(Camera camera, float old) {
-		markDirty = true;
-	}
-
-	@Override
 	public void cameraChangeResolution(Camera camera, int oldHeight, int oldWidth) {
-		markDirty = true;
+		super.cameraChangeResolution(camera, oldHeight, oldWidth);
 
 		int height = camera.getResolutionHeight(), width = camera.getResolutionWidth();
 		setSize(getWidth() - oldWidth + width, getHeight() - oldHeight + height);
@@ -135,18 +93,12 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 	}
 
 	@Override
-	public void cameraMove(Camera camera, Vector3f old) {}
-
-	@Override
-	public void cameraRotate(Camera camera, Rotation3f old) {}
-
-	@Override
 	public void display(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2(); // get the OpenGL graphics context
 
-		if (markDirty) {
+		if (isMarkedDirty()) {
 			reshape(gl, getCamera());
-			markDirty = false;
+			markClean();
 		}
 		update();
 		render(gl);
@@ -160,20 +112,9 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 	@Override
 	public void dispose(GLAutoDrawable drawable) {}
 
-	public abstract Camera getCamera();
-
+	@Override
 	public float getFPS() {
 		return animator.getLastFPS();
-	}
-
-	public PainterFactory getPainterFactory() {
-		return f;
-	}
-
-	protected abstract RenderMode getRenderMode();
-
-	public WorldController getWorld() {
-		return world;
 	}
 
 	@Override
@@ -192,17 +133,15 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 		gl.glShadeModel(GL2.GL_SMOOTH); // blends colors nicely, and smoothes out lighting
 	}
 
-	protected boolean isDirty() {
-		return isDirty;
-	}
-
+	@Override
 	protected synchronized void markClean() {
-		isDirty = false;
+		super.markClean();
 		animator.pause();
 	}
 
+	@Override
 	protected synchronized void markDirty() {
-		isDirty = true;
+		super.markDirty();
 		animator.resume();
 	}
 
@@ -221,8 +160,8 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 		gl.glPushMatrix();
 		gl.glScalef(1, 1, -1);
 
-		f.paint(gl, Universe.class, world.getUniverse(), getRenderMode());
-		f.paint(gl, Origin.class, new Origin(camera.getPosition().length() / 10), getRenderMode());
+		getPainterFactory().paint(gl, Universe.class, getWorldController().getUniverse(), getRenderMode());
+		getPainterFactory().paint(gl, Origin.class, new Origin(camera.getPosition().length() / 10), getRenderMode());
 		gl.glPopMatrix();
 
 		gl.glPopMatrix();
@@ -277,22 +216,5 @@ public abstract class AbstractVisualiser extends Frame implements GLEventListene
 		saveNextFrame = true;
 	}
 
-	@Override
-	public void textureChange(Texture texture) {
-		if (getRenderMode().getFaceMode().equals(FaceMode.TEXTURED))
-			markDirty();
-	}
-
-	@Override
-	public void textureFrameChange(int current, int old) {
-		if (getRenderMode().getFaceMode().equals(FaceMode.TEXTURED))
-			markDirty();
-	}
-
 	protected abstract boolean update();
-
-	@Override
-	public void worldChanged() {
-		markDirty();
-	}
 }

@@ -4,16 +4,13 @@ import com.jayanslow.projection.texture.controllers.TextureController;
 import com.jayanslow.projection.world.controllers.WorldController;
 import com.jayanslow.projection.world.models.Projector;
 
-public class ProjectorVisualiser extends AbstractVisualiser {
+public class ProjectorJoglVisualiser extends AbstractJoglVisualiser {
 
-	/**
-	 * 
-	 */
 	private static final long		serialVersionUID	= -3666227001668172958L;
 	private final ProjectorCamera	camera;
 	private RenderMode				renderMode;
 
-	public ProjectorVisualiser(WorldController world, TextureController textures, Projector projector,
+	public ProjectorJoglVisualiser(WorldController world, TextureController textures, Projector projector,
 			RenderMode renderMode) {
 		super(world, textures, String.format("Projector #%s", projector.getProjectorId()), projector
 				.getResolutionHeight(), projector.getResolutionWidth());
